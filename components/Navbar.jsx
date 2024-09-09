@@ -2,13 +2,17 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="absolute w-full flex items-center justify-between p-4">
-      <div>Logo</div>
+    <div className="absolute z-20 w-full flex items-center justify-between p-5">
+      <Link href="/">
+        <Image src="/logo.png" width={200} height={200} alt="Logo" />
+      </Link>
 
       <div className="md:hidden">
         <button
@@ -24,16 +28,16 @@ export default function Navbar() {
           isOpen ? "flex" : "hidden"
         }`}
       >
-        <a href="" className="text-center py-2 md:py-0">
+        <a href="/ideas" className="text-center py-2 md:py-0">
           Ideas
         </a>
-        <a href="" className="text-center py-2 md:py-0">
+        <a href="/projects" className="text-center py-2 md:py-0">
           Projects
         </a>
-        <a href="" className="text-center py-2 md:py-0">
+        <a href="/submit" className="text-center py-2 md:py-0">
           Submit
         </a>
-        <Button className="text-xl px-4 py-5 rounded-2xl">Login</Button>
+        <Button className="text-xl px-4 py-5 rounded-xl">Login</Button>
       </div>
     </div>
   );
