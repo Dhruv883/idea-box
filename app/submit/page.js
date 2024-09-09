@@ -1,14 +1,9 @@
-"use client";
 import Navbar from "@/components/Navbar";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Lightbulb, Globe, MoveRight } from "lucide-react";
+import { Lightbulb, Globe } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function Home() {
-  const [option, setOption] = useState("");
-
   const menu = [
     {
       title: "Share your project idea",
@@ -39,20 +34,14 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-16 py-12">
               {menu.map((item, idx) => {
                 return (
-                  <div
-                    onClick={() => {
-                      setOption(item.tag);
-                    }}
-                    key={idx}
-                    className="cursor-pointer"
-                  >
+                  <div key={idx} className="cursor-pointer">
                     <Link href={`/submit/${item.link}`}>
                       <Card
                         className={`group w-96 h-full hover:bg-bgGray hover:text-white hover:border-[#242424]`}
                       >
                         <CardContent className="flex flex-col items-center p-6 h-full text-center">
                           <span
-                            className={`p-3 rounded-full mb-4 bg-gray-300 group-hover:bg-bgGray2`}
+                            className={`p-3 rounded-full mb-4 bg-gray-200 group-hover:bg-bgGray2`}
                           >
                             {item.icon}
                           </span>
