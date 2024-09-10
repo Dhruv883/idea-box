@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Zap, Globe, Target } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 
 export default function Home() {
   const cardDate = [
@@ -49,15 +50,19 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex items-center justify-center flex-wrap gap-y-3 gap-x-4">
-                <Button className="text-xl px-4 py-6 rounded-2xl">
-                  Submit an Idea
-                </Button>
-                <Button
-                  variant="outline"
-                  className="text-xl px-4 py-6 rounded-2xl"
-                >
-                  Explore Projects
-                </Button>
+                <Link href="/submit" className="rounded-2xl">
+                  <Button className="text-xl px-4 py-6 rounded-2xl">
+                    Submit an Idea
+                  </Button>
+                </Link>
+                <Link href="/projects" className="rounded-2xl">
+                  <Button
+                    variant="outline"
+                    className="text-xl px-4 py-6 rounded-2xl"
+                  >
+                    Explore Projects
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

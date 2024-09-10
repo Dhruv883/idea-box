@@ -1,18 +1,10 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import { useState } from "react";
-import { PlusCircle, X } from "lucide-react";
+import { X, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -27,9 +19,8 @@ export default function Home() {
   const [documents, setDocuments] = useState([]);
   const [tags, setTags] = useState([]);
   const [newFeature, setNewFeature] = useState("");
-  const [newDocTitle, setNewDocTitle] = useState("");
-  const [newDocFile, setNewDocFile] = useState(null);
 
+  const [editingFeatureIndex, setEditingFeatureIndex] = useState(null);
   const preExistingTags = [
     "AI",
     "Full Stack",
@@ -39,19 +30,28 @@ export default function Home() {
     "Blockchain",
   ];
 
-  const addFeature = () => {
+  const addFeature = (event) => {
+    event.preventDefault();
     if (newFeature) {
-      setFeatures([...features, newFeature]);
+      if (editingFeatureIndex !== null) {
+        const updatedFeatures = [...features];
+        updatedFeatures[editingFeatureIndex] = newFeature;
+        setFeatures(updatedFeatures);
+        setEditingFeatureIndex(null);
+      } else {
+        setFeatures([...features, newFeature]);
+      }
       setNewFeature("");
     }
   };
 
-  const addDocument = () => {
-    if (newDocTitle && newDocFile) {
-      setDocuments([...documents, { title: newDocTitle, file: newDocFile }]);
-      setNewDocTitle("");
-      setNewDocFile(null);
-    }
+  const editFeature = (index) => {
+    setNewFeature(features[index]);
+    setEditingFeatureIndex(index);
+  };
+
+  const removeFeature = (index) => {
+    setFeatures(features.filter((_, i) => i !== index));
   };
 
   const addTag = (tag) => {
@@ -66,126 +66,113 @@ export default function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Form submitted");
+    const formData = {
+      title: event.target.title.value,
+      domain: event.target.domain.value,
+      description: event.target.description.value,
+      audience: event.target.audience.value,
+      features,
+      documents,
+      tags,
+    };
+    console.log("Form submitted:", formData);
   };
 
   return (
     <div className={`flex flex-col min-h-screen bg-white text-black relative`}>
       <Navbar />
       <main className="flex-1">
-        <section className="min-h-screen w-full flex justify-center pt-24">
+        <section className="border border-black min-h-screen w-full flex justify-center pt-24">
           <form
             onSubmit={handleSubmit}
-            className="max-w-4xl mx-auto p-6 space-y-8"
+            className="w-full md:w-2/3 lg:w-1/2 mx-auto p-6 space-y-8"
           >
-            <h1 className="text-3xl font-bold mb-6">
+            <h1 className="text-3xl font-bold mb-6 text-center">
               Submit Your Project Idea
             </h1>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Project Description</Label>
-              <Input
-                id="description"
+              <Label htmlFor="title">Project Title</Label>
+              <input
+                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                id="title"
                 placeholder="One-line title of your project"
+                minLength={15}
                 required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="domain">Project Domain</Label>
+              <input
+                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                id="domain"
+                placeholder="Domain of your project"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Project Description</Label>
+
+              <textarea
+                className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                id="description"
+                placeholder="Brief Description of your project"
+                required
+                minLength={25}
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="audience">Target Audience</Label>
-              <Textarea
+              <input
+                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 id="audience"
                 placeholder="Describe your target audience"
-                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Features</Label>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {features.map((feature, index) => (
-                  <Badge key={index} variant="secondary">
-                    {feature}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFeatures(features.filter((_, i) => i !== index))
-                      }
-                      className="ml-1"
+              <div className="space-y-4">
+                <Label>Features</Label>
+                <ul className="space-y-2">
+                  {features.map((feature, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center justify-between bg-secondary p-2 rounded"
                     >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline">
-                    <PlusCircle className="h-4 w-4 mr-2" /> Add Feature
+                      <span>{feature}</span>
+                      <div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => editFeature(index)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeFeature(index)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center space-x-2">
+                  <input
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    value={newFeature}
+                    onChange={(e) => setNewFeature(e.target.value)}
+                    placeholder="Enter a feature"
+                  />
+                  <Button onClick={addFeature}>
+                    {editingFeatureIndex !== null ? "Update" : "Add"}
                   </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add a New Feature</DialogTitle>
-                  </DialogHeader>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      value={newFeature}
-                      onChange={(e) => setNewFeature(e.target.value)}
-                      placeholder="Enter a feature"
-                    />
-                    <Button onClick={addFeature}>Add</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Supporting Documents</Label>
-              <div className="space-y-2 mb-2">
-                {documents.map((doc, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between bg-secondary p-2 rounded"
-                  >
-                    <span>{doc.title}</span>
-                    <Button
-                      variant="ghost"
-                      onClick={() =>
-                        setDocuments(documents.filter((_, i) => i !== index))
-                      }
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
+                </div>
               </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline">
-                    <PlusCircle className="h-4 w-4 mr-2" /> Add Document
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add a Supporting Document</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <Input
-                      placeholder="Document title"
-                      value={newDocTitle}
-                      onChange={(e) => setNewDocTitle(e.target.value)}
-                    />
-                    <Input
-                      type="file"
-                      onChange={(e) =>
-                        e.target.files && setNewDocFile(e.target.files[0])
-                      }
-                    />
-                    <Button onClick={addDocument}>Add Document</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
             </div>
 
             <div className="space-y-2">
@@ -218,7 +205,8 @@ export default function Home() {
                 </SelectContent>
               </Select>
               {tags.includes("custom") && (
-                <Input
+                <input
+                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   placeholder="Enter custom tag"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -236,7 +224,7 @@ export default function Home() {
               )}
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full py-6 text-lg">
               Submit Project Idea
             </Button>
           </form>

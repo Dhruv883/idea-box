@@ -37,7 +37,9 @@ export default function Navbar() {
         <a href="/submit" className="text-center py-2 md:py-0">
           Submit
         </a>
-        <Button className="text-xl px-4 py-5 rounded-xl">Login</Button>
+        <Link href="/login" className="rounded-2xl">
+          <Button className="text-xl px-4 py-5 rounded-xl">Login</Button>
+        </Link>
       </div>
     </div>
   );
