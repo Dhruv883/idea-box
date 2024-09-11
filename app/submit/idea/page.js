@@ -3,7 +3,6 @@ import Navbar from "@/components/Navbar";
 import { useState } from "react";
 import { X, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -13,14 +12,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/components/hooks/use-toast";
 
 export default function Home() {
+  const { toast } = useToast();
   const [features, setFeatures] = useState([]);
-  const [documents, setDocuments] = useState([]);
   const [tags, setTags] = useState([]);
   const [newFeature, setNewFeature] = useState("");
-
   const [editingFeatureIndex, setEditingFeatureIndex] = useState(null);
+
   const preExistingTags = [
     "AI",
     "Full Stack",
@@ -32,17 +32,23 @@ export default function Home() {
 
   const addFeature = (event) => {
     event.preventDefault();
-    if (newFeature) {
-      if (editingFeatureIndex !== null) {
-        const updatedFeatures = [...features];
-        updatedFeatures[editingFeatureIndex] = newFeature;
-        setFeatures(updatedFeatures);
-        setEditingFeatureIndex(null);
-      } else {
-        setFeatures([...features, newFeature]);
-      }
-      setNewFeature("");
+    if (newFeature.length <= 15) {
+      toast({
+        title: "Feature too short",
+        description: "Each feature should be longer than 15 characters.",
+        variant: "destructive",
+      });
+      return;
     }
+    if (editingFeatureIndex !== null) {
+      const updatedFeatures = [...features];
+      updatedFeatures[editingFeatureIndex] = newFeature;
+      setFeatures(updatedFeatures);
+      setEditingFeatureIndex(null);
+    } else {
+      setFeatures([...features, newFeature]);
+    }
+    setNewFeature("");
   };
 
   const editFeature = (index) => {
@@ -66,20 +72,41 @@ export default function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (features.length < 2) {
+      return toast({
+        title: "Insufficient Features",
+        description: "Please add at least two features.",
+        variant: "destructive",
+      });
+    }
+
+    if (tags.length === 0) {
+      return toast({
+        title: "No Tags Added",
+        description: "Please add at least one tag.",
+        variant: "destructive",
+      });
+    }
+
     const formData = {
       title: event.target.title.value,
       domain: event.target.domain.value,
       description: event.target.description.value,
       audience: event.target.audience.value,
       features,
-      documents,
       tags,
     };
+
     console.log("Form submitted:", formData);
+    return toast({
+      title: "Success",
+      description: "Project idea submitted successfully!",
+    });
   };
 
   return (
-    <div className={`flex flex-col min-h-screen bg-white text-black relative`}>
+    <div className="flex flex-col min-h-screen bg-white text-black relative">
       <Navbar />
       <main className="flex-1">
         <section className="border border-black min-h-screen w-full flex justify-center pt-24">
@@ -92,7 +119,7 @@ export default function Home() {
             </h1>
 
             <div className="space-y-2">
-              <Label htmlFor="title">Project Title</Label>
+              <Label htmlFor="title">Project Title *</Label>
               <input
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 id="title"
@@ -103,17 +130,17 @@ export default function Home() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="domain">Project Domain</Label>
+              <Label htmlFor="domain">Project Domain *</Label>
               <input
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 id="domain"
                 placeholder="Domain of your project"
+                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Project Description</Label>
-
+              <Label htmlFor="description">Project Description *</Label>
               <textarea
                 className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 id="description"
@@ -224,9 +251,9 @@ export default function Home() {
               )}
             </div>
 
-            <Button type="submit" className="w-full py-6 text-lg">
-              Submit Project Idea
-            </Button>
+            <div className="flex justify-center">
+              <Button type="submit">Submit</Button>
+            </div>
           </form>
         </section>
       </main>

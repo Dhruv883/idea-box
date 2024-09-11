@@ -55,12 +55,12 @@ export default function Home() {
                     Submit an Idea
                   </Button>
                 </Link>
-                <Link href="/projects" className="rounded-2xl">
+                <Link href="/ideas" className="rounded-2xl">
                   <Button
                     variant="outline"
                     className="text-xl px-4 py-6 rounded-2xl"
                   >
-                    Explore Projects
+                    Explore Ideas
                   </Button>
                 </Link>
               </div>

@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Poppins } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
       </head>
       <html lang="en">
         <body className={`${poppins.className} antialiased scroll-smooth`}>
+          <Toaster />
           {children}
         </body>
       </html>

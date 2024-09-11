@@ -31,7 +31,7 @@ export default function Home() {
             <h1 className="text-center text-3xl font-semibold sm:text-4xl md:text-5xl py-6">
               Submit Ideas, Projects
             </h1>
-            <div className="grid md:grid-cols-2 gap-16 py-12">
+            <div className="grid lg:grid-cols-2 gap-16 py-12">
               {menu.map((item, idx) => {
                 return (
                   <div key={idx} className="cursor-pointer">
