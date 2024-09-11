@@ -10,6 +10,7 @@ module.exports = {
     extend: {
       screens: {
         xsm: "640px",
+        mobile2: "425px",
       },
       colors: {
         background: "hsl(var(--background))",
