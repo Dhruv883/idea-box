@@ -29,40 +29,195 @@ const mockIdeas = [
   {
     id: 1,
     title: "Open Source Code Editor",
-    description: "A lightweight, extensible code editor for web development",
-    projectType: "Application",
-    tags: ["Desktop", "Developer Tools", "Mobile", "Productivity"],
+    description:
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
+    tags: ["Desktop", "Developer Tools"],
     likes: 156,
-    suggestions: 23,
+    comments: 23,
+    collaborators: [
+      {
+        id: 1,
+        name: "Alice Johnson",
+        avatar: "/placeholder.svg?height=32&width=32",
+        role: "Lead Developer",
+      },
+      {
+        id: 2,
+        name: "Bob Smith",
+        avatar: "/placeholder.svg?height=32&width=32",
+        role: "UX Designer",
+      },
+    ],
+    suggestions: [
+      {
+        id: 1,
+        user: "Charlie Brown",
+        content: "Add support for multiple languages",
+        votes: 15,
+        timestamp: "2023-06-15T10:30:00Z",
+      },
+      {
+        id: 2,
+        user: "Diana Prince",
+        content: "Implement a plugin system",
+        votes: 12,
+        timestamp: "2023-06-16T14:45:00Z",
+      },
+      {
+        id: 3,
+        user: "Ethan Hunt",
+        content: "Create a dark mode theme",
+        votes: 8,
+        timestamp: "2023-06-17T09:15:00Z",
+      },
+      {
+        id: 4,
+        user: "Charlie Brown",
+        content: "Add support for multiple languages",
+        votes: 15,
+        timestamp: "2023-06-15T10:30:00Z",
+      },
+      {
+        id: 5,
+        user: "Diana Prince",
+        content: "Implement a plugin system",
+        votes: 12,
+        timestamp: "2023-06-16T14:45:00Z",
+      },
+      {
+        id: 6,
+        user: "Ethan Hunt",
+        content: "Create a dark mode theme",
+        votes: 8,
+        timestamp: "2023-06-17T09:15:00Z",
+      },
+    ],
   },
   {
     id: 2,
     title: "AI-powered Task Manager",
     description:
-      "Task management app that uses AI to prioritize and schedule tasks",
-    projectType: "Application",
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
     tags: ["AI", "Mobile", "Productivity"],
     likes: 89,
-    suggestions: 12,
+    comments: 12,
+    collaborators: [
+      {
+        id: 3,
+        name: "Eve Williams",
+        avatar: "/placeholder.svg?height=32&width=32",
+        role: "AI Specialist",
+      },
+    ],
+    suggestions: [
+      {
+        id: 4,
+        user: "Frank Castle",
+        content: "Integrate with popular calendar apps",
+        votes: 8,
+        timestamp: "2023-06-18T11:20:00Z",
+      },
+      {
+        id: 5,
+        user: "Grace Hopper",
+        content: "Add voice command feature",
+        votes: 6,
+        timestamp: "2023-06-19T16:30:00Z",
+      },
+    ],
   },
   {
     id: 3,
     title: "Decentralized Social Media Platform",
-    description: "A blockchain-based social media platform focused on privacy",
-    projectType: "Application",
+    description:
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
     tags: ["Web", "Blockchain", "Social"],
     likes: 201,
-    suggestions: 34,
+    comments: 34,
+    collaborators: [
+      {
+        id: 4,
+        name: "Grace Lee",
+        avatar: "/placeholder.svg?height=32&width=32",
+        role: "Blockchain Developer",
+      },
+      {
+        id: 5,
+        name: "Henry Ford",
+        avatar: "/placeholder.svg?height=32&width=32",
+        role: "Security Expert",
+      },
+    ],
+    suggestions: [
+      {
+        id: 6,
+        user: "Iris West",
+        content: "Implement end-to-end encryption for messages",
+        votes: 25,
+        timestamp: "2023-06-20T13:10:00Z",
+      },
+      {
+        id: 7,
+        user: "Jack Sparrow",
+        content: "Add a decentralized file sharing feature",
+        votes: 18,
+        timestamp: "2023-06-21T10:05:00Z",
+      },
+      {
+        id: 8,
+        user: "Kate Bishop",
+        content: "Create a user-friendly wallet system",
+        votes: 14,
+        timestamp: "2023-06-22T15:40:00Z",
+      },
+    ],
   },
   {
     id: 4,
     title:
       "Open Source Code Editor Open Source Code Editor Open Source Code Editor",
-    description: "A lightweight, extensible code editor for web development",
-    projectType: "Application",
+    description:
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
     tags: ["Desktop", "Developer Tools"],
     likes: 156,
-    suggestions: 23,
+    comments: 23,
+    collaborators: [
+      {
+        id: 1,
+        name: "Alice Johnson",
+        avatar: "/placeholder.svg?height=32&width=32",
+        role: "Lead Developer",
+      },
+      {
+        id: 2,
+        name: "Bob Smith",
+        avatar: "/placeholder.svg?height=32&width=32",
+        role: "UX Designer",
+      },
+    ],
+    suggestions: [
+      {
+        id: 1,
+        user: "Charlie Brown",
+        content: "Add support for multiple languages",
+        votes: 15,
+        timestamp: "2023-06-15T10:30:00Z",
+      },
+      {
+        id: 2,
+        user: "Diana Prince",
+        content: "Implement a plugin system",
+        votes: 12,
+        timestamp: "2023-06-16T14:45:00Z",
+      },
+      {
+        id: 3,
+        user: "Ethan Hunt",
+        content: "Create a dark mode theme",
+        votes: 8,
+        timestamp: "2023-06-17T09:15:00Z",
+      },
+    ],
   },
 ];
 
