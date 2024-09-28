@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Filter, ThumbsUp, ChevronUp, MessageSquare } from "lucide-react";
+import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,7 +21,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import IdeaCard from "@/components/IdeaCard";
 import Navbar from "@/components/Navbar";
 
@@ -265,7 +265,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`flex flex-col min-h-screen bg-white text-black relative`}>
+    <div className={`flex flex-col min-h-screen text-black relative`}>
       <Navbar />
       <main className="flex-1 pt-16">
         <div className="mx-auto p-4 sm:p-6 lg:p-8 ">

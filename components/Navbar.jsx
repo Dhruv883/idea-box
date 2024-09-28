@@ -4,14 +4,17 @@ import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { ProfileDropdown } from "./ProfileDropdown";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <div className="absolute z-20 w-full flex items-center justify-between p-5">
       <Link href="/">
-        <Image src="/logo.png" width={200} height={200} alt="Logo" />
+        <Image src="/logo-main.png" width={200} height={200} alt="Logo" />
       </Link>
 
       <div className="md:hidden">
@@ -24,7 +27,7 @@ export default function Navbar() {
       </div>
 
       <div
-        className={`flex-col md:flex-row md:flex md:items-center md:gap-x-5 text-xl border-b-2 border-b-black md:border-none absolute md:relative bg-white md:bg-transparent top-16 md:top-auto right-0 md:right-auto w-full md:w-auto p-4 md:p-0 ${
+        className={`flex-col md:flex-row md:flex md:items-center md:gap-x-8 text-xl border-b-2 border-b-black md:border-none absolute md:relative bg-white md:bg-transparent top-16 md:top-auto right-0 md:right-auto w-full md:w-auto p-4 md:p-0 ${
           isOpen ? "flex" : "hidden"
         }`}
       >
@@ -37,9 +40,16 @@ export default function Navbar() {
         <a href="/submit" className="text-center py-2 md:py-0">
           Submit
         </a>
-        <Link href="/login" className="rounded-2xl">
-          <Button className="text-xl px-4 py-5 rounded-xl">Login</Button>
-        </Link>
+        {session && session.user ? (
+          <ProfileDropdown />
+        ) : (
+          <Link
+            href="/login"
+            className="rounded-2xl flex justify-center mt-3 md:mt-0"
+          >
+            <Button className="text-xl px-4 py-5 rounded-xl">Login</Button>
+          </Link>
+        )}
       </div>
     </div>
   );

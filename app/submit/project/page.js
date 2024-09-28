@@ -4,6 +4,7 @@ import { useState } from "react";
 import { X, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/hooks/use-toast";
 
 import {
   Select,
@@ -18,6 +19,7 @@ import Navbar from "@/components/Navbar";
 export default function Home() {
   const [techStack, setTechStack] = useState([]);
   const [tags, setTags] = useState([]);
+  const { toast } = useToast();
 
   const suggestedTechStack = [
     "JavaScript",
@@ -74,6 +76,23 @@ export default function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (tags.length === 0) {
+      return toast({
+        title: "No Tags Added",
+        description: "Please add at least one tag.",
+        variant: "destructive",
+      });
+    }
+
+    if (techStack.length === 0) {
+      return toast({
+        title: "Tech Stack not Selected",
+        description: "Please add at least one tag.",
+        variant: "destructive",
+      });
+    }
+
     const formData = {
       name: event.target.name.value,
       title: event.target.title.value,
@@ -85,6 +104,10 @@ export default function Home() {
       tags,
     };
     console.log("Form submitted:", formData);
+    return toast({
+      title: "Success",
+      description: "Project idea submitted successfully!",
+    });
   };
   return (
     <div className={`flex flex-col min-h-screen bg-white text-black relative`}>
@@ -100,7 +123,7 @@ export default function Home() {
             </h1>
 
             <div className="space-y-4">
-              <Label htmlFor="name">Project Name</Label>
+              <Label htmlFor="name">Project Name *</Label>
               <input
                 type="text"
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
@@ -112,7 +135,7 @@ export default function Home() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="title">Project Title</Label>
+              <Label htmlFor="title">Project Title *</Label>
               <input
                 type="text"
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
@@ -124,17 +147,18 @@ export default function Home() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="domain">Project Domain</Label>
+              <Label htmlFor="domain">Project Domain *</Label>
               <input
                 type="text"
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 id="domain"
                 placeholder="Domain of your project"
+                required
               />
             </div>
 
             <div className="space-y-4">
-              <Label htmlFor="description">Project Description</Label>
+              <Label htmlFor="description">Project Description *</Label>
               <textarea
                 className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 id="description"
@@ -146,7 +170,7 @@ export default function Home() {
             </div>
 
             <div className="space-y-4">
-              <Label htmlFor="url">Repository URL</Label>
+              <Label htmlFor="url">Repository URL *</Label>
               <div className="flex items-center space-x-2">
                 <Github className="h-5 w-5" />
                 <input
@@ -161,7 +185,7 @@ export default function Home() {
             </div>
 
             <div className="space-y-2">
-              <Label>Tech Stack</Label>
+              <Label>Tech Stack *</Label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {techStack.map((tech) => (
                   <Badge key={tech} variant="secondary">
@@ -211,7 +235,7 @@ export default function Home() {
             </div>
 
             <div className="space-y-2">
-              <Label>Tags</Label>
+              <Label>Tags *</Label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {tags.map((tag) => (
                   <Badge key={tag} variant="secondary">

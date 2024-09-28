@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/drawer";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const IdeaCard = ({ idea }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(null);
@@ -35,36 +36,45 @@ const IdeaCard = ({ idea }) => {
     useState(false);
   return (
     <>
-      <Card className="w-[18rem] mobile2:w-96 h-full px-6 py-4 grid gap-6 cursor-default group hover:bg-black">
+      <Card className="w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group hover:bg-bgGray">
         <div className="space-y-2 group-hover:text-white">
           <h3 className="text-2xl font-semibold max-h-16 text-ellipsis overflow-hidden">
             {idea.title}
           </h3>
-          <p className="max-h-12 text-ellipsis overflow-hidden">
+          <p className="max-h-12 text-ellipsis overflow-hidden group-hover:text-textGray">
             {idea.description}.
           </p>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="flex flex-wrap gap-2 h-6 overflow-hidden w-full">
-            {idea.tags.map((tag, idx) => {
-              return (
-                <Badge
-                  key={idx}
-                  className="group-hover:bg-white group-hover:text-black"
-                >
-                  {tag}
-                </Badge>
-              );
-            })}
+        <div className="space-y-3">
+          <div className="group-hover:text-white">
+            Submitted by -{" "}
+            <Link href="/u/" className="hover:underline">
+              John Doe
+            </Link>
           </div>
-          <div className="flex items-center gap-4 text-sm  w-1/3 justify-center pb-1 text-black">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsDialogOpen(true)}
-            >
-              View Details
-            </Button>
+
+          <div className="flex items-center justify-between">
+            <div className="flex flex-wrap gap-2 h-6 overflow-hidden w-full">
+              {idea.tags.map((tag, idx) => {
+                return (
+                  <Badge
+                    key={idx}
+                    className="group-hover:bg-white group-hover:text-black"
+                  >
+                    {tag}
+                  </Badge>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-4 text-sm  w-1/3 justify-center pb-1 text-black">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsDialogOpen(true)}
+              >
+                View Details
+              </Button>
+            </div>
           </div>
         </div>
       </Card>
@@ -76,17 +86,24 @@ const IdeaCard = ({ idea }) => {
       >
         <DialogContent className="w-4/5 max-w-none max-h-none border-none">
           <DialogHeader className="h-auto">
-            <DialogTitle className="text-center text-xl md:text-4xl mb-4">
+            <DialogTitle className="text-center text-xl md:text-4xl mb-4 ">
               {idea?.title}
             </DialogTitle>
             <ScrollArea className="max-h-[200px] pr-4">
-              <DialogDescription className="text-center text-lg h-auto">
+              <DialogDescription className="text-center text-lg h-auto text-textGray">
                 {idea?.description}
               </DialogDescription>
               <ScrollBar orientation="vertical" />
             </ScrollArea>
           </DialogHeader>
-          <ScrollArea className="max-h-[100px] pr-4">
+          <ScrollArea className="max-h-56 pr-4">
+            <div className="group-hover:text-white">
+              Submitted by -{" "}
+              <Link href="/u/" className="hover:underline">
+                John Doe
+              </Link>
+            </div>
+
             <div className="flex flex-wrap gap-2 mt-4 items-center">
               <span className="font-medium">Tags: </span>
               {idea?.tags.map((tag) => (
