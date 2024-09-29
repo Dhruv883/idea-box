@@ -21,9 +21,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import IdeaCard from "@/components/IdeaCard";
 import Navbar from "@/components/Navbar";
+import { useSession } from "next-auth/react";
 
 const mockIdeas = [
   {
@@ -243,6 +244,7 @@ const tagOptions = [
 ];
 
 export default function Home() {
+  const { data, status } = useSession();
   const [ideas, setIdeas] = useState(mockIdeas);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -263,6 +265,8 @@ export default function Home() {
     setIdeas(filterIdeas());
     setIsFilterOpen(false);
   };
+
+  if (status == "loading") return <div>loading</div>;
 
   return (
     <div className={`flex flex-col min-h-screen text-black relative`}>

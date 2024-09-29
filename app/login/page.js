@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data, status } = useSession();
 
   return (
     <div className={`flex flex-col min-h-screen text-black relative`}>

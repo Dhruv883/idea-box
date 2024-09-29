@@ -9,7 +9,7 @@ import { ProfileDropdown } from "./ProfileDropdown";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: session } = useSession();
+  const { data, status } = useSession();
 
   return (
     <div className="absolute z-20 w-full flex items-center justify-between p-5">
@@ -40,7 +40,7 @@ export default function Navbar() {
         <a href="/submit" className="text-center py-2 md:py-0">
           Submit
         </a>
-        {session && session.user ? (
+        {data && data.user ? (
           <ProfileDropdown />
         ) : (
           <Link

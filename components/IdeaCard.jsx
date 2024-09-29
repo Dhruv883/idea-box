@@ -12,6 +12,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog";
 
 import {
@@ -128,14 +130,35 @@ const IdeaCard = ({ idea }) => {
                 <MessageSquare className="mr-2 h-4 w-4" />
                 View Suggestions
               </Button>
+
               <Button
                 variant="outline"
                 onClick={() => setIsViewCollaboratorsDrawerOpen(true)}
               >
                 <Users className="mr-2 h-4 w-4" />
-                View Collaborators
+                View Interested Developers
               </Button>
-              <Button variant="outline">Interested in Building</Button>
+              {/* INTERESTED IN BUILDING */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline">Interested in Building</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Interested in Building?</DialogTitle>
+                    <DialogDescription>
+                      By proceeding, your profile will be visible to others,
+                      allowing you to connect and collaborate on projects with
+                      fellow individuals
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <DialogFooter>
+                    <Button type="submit">I'm Still Interested</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Button variant="outline" size="sm">
                 <ThumbsUp className="mr-2 h-4 w-4" />
                 {idea?.likes}
@@ -146,6 +169,7 @@ const IdeaCard = ({ idea }) => {
         </DialogContent>
       </Dialog>
 
+      {/*  SUGGEST FEATURES DRAWER */}
       <Drawer
         open={isSuggestionDrawerOpen}
         onOpenChange={setIsSuggestionDrawerOpen}
@@ -172,6 +196,7 @@ const IdeaCard = ({ idea }) => {
         </DrawerContent>
       </Drawer>
 
+      {/*  VIEW SUGGESTIONS DRAWER */}
       <Drawer
         open={isViewSuggestionsDrawerOpen}
         onOpenChange={setIsViewSuggestionsDrawerOpen}
@@ -198,15 +223,16 @@ const IdeaCard = ({ idea }) => {
         </DrawerContent>
       </Drawer>
 
+      {/*  VIEW INTERESTED PEEPS DRAWER */}
       <Drawer
         open={isViewCollaboratorsDrawerOpen}
         onOpenChange={setIsViewCollaboratorsDrawerOpen}
       >
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>View Collaborators</DrawerTitle>
+            <DrawerTitle>View Interested Builders</DrawerTitle>
             <DrawerDescription>
-              Meet the people working on this project
+              Meet the people working / interested in working on this project
             </DrawerDescription>
           </DrawerHeader>
           <ScrollArea className="p-4 h-full">
