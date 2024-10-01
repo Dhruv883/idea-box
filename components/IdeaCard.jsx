@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { ThumbsUp, MessageSquare, Users } from "lucide-react";
+import { ArrowBigUp, MessageSquare, Users, ArrowUp } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
@@ -38,17 +38,17 @@ const IdeaCard = ({ idea }) => {
     useState(false);
   return (
     <>
-      <Card className="w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group hover:bg-bgGray">
-        <div className="space-y-2 group-hover:text-white">
+      <Card className="dark w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group bg-bgGray border-[#242424] text-white">
+        <div className="space-y-2">
           <h3 className="text-2xl font-semibold max-h-16 text-ellipsis overflow-hidden">
             {idea.title}
           </h3>
-          <p className="max-h-12 text-ellipsis overflow-hidden group-hover:text-textGray">
+          <p className="max-h-12 text-ellipsis overflow-hidden text-textGray">
             {idea.description}.
           </p>
         </div>
-        <div className="space-y-3">
-          <div className="group-hover:text-white">
+        <div className="space-y-3 ">
+          <div className="">
             Submitted by -{" "}
             <Link href="/u/" className="hover:underline">
               John Doe
@@ -61,19 +61,15 @@ const IdeaCard = ({ idea }) => {
                 return (
                   <Badge
                     key={idx}
-                    className="group-hover:bg-white group-hover:text-black"
+                    className="bg-bgGray2 hover:bg-bgGray2 text-textGray"
                   >
                     {tag}
                   </Badge>
                 );
               })}
             </div>
-            <div className="flex items-center gap-4 text-sm  w-1/3 justify-center pb-1 text-black">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsDialogOpen(true)}
-              >
+            <div className="flex items-center gap-4 text-sm  w-1/3 justify-center pb-1  ">
+              <Button size="sm" onClick={() => setIsDialogOpen(true)}>
                 View Details
               </Button>
             </div>
@@ -86,9 +82,9 @@ const IdeaCard = ({ idea }) => {
         onOpenChange={() => setIsDialogOpen(false)}
         className="overflow-auto"
       >
-        <DialogContent className="w-4/5 max-w-none max-h-none border-none">
+        <DialogContent className="w-4/5 max-w-none max-h-none border-none bg-bgGray text-white">
           <DialogHeader className="h-auto">
-            <DialogTitle className="text-center text-xl md:text-4xl mb-4 ">
+            <DialogTitle className="text-center text-xl md:text-4xl mb-4 text-white">
               {idea?.title}
             </DialogTitle>
             <ScrollArea className="max-h-[200px] pr-4">
@@ -99,7 +95,7 @@ const IdeaCard = ({ idea }) => {
             </ScrollArea>
           </DialogHeader>
           <ScrollArea className="max-h-56 pr-4">
-            <div className="group-hover:text-white">
+            <div className="text-white">
               Submitted by -{" "}
               <Link href="/u/" className="hover:underline">
                 John Doe
@@ -107,9 +103,12 @@ const IdeaCard = ({ idea }) => {
             </div>
 
             <div className="flex flex-wrap gap-2 mt-4 items-center">
-              <span className="font-medium">Tags: </span>
+              <span className="font-medium text-white">Tags: </span>
               {idea?.tags.map((tag) => (
-                <Badge key={tag} variant="secondary">
+                <Badge
+                  key={tag}
+                  className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2"
+                >
                   {tag}
                 </Badge>
               ))}
@@ -119,6 +118,7 @@ const IdeaCard = ({ idea }) => {
               <Button
                 variant="outline"
                 onClick={() => setIsSuggestionDrawerOpen(true)}
+                className="bg-bgGray2 text-white border border-bgGray2"
               >
                 <MessageSquare className="mr-2 h-4 w-4" />
                 Suggest Features
@@ -126,6 +126,7 @@ const IdeaCard = ({ idea }) => {
               <Button
                 variant="outline"
                 onClick={() => setIsViewSuggestionsDrawerOpen(true)}
+                className="bg-bgGray2 text-white border border-bgGray2"
               >
                 <MessageSquare className="mr-2 h-4 w-4" />
                 View Suggestions
@@ -134,6 +135,7 @@ const IdeaCard = ({ idea }) => {
               <Button
                 variant="outline"
                 onClick={() => setIsViewCollaboratorsDrawerOpen(true)}
+                className="bg-bgGray2 text-white border border-bgGray2"
               >
                 <Users className="mr-2 h-4 w-4" />
                 View Interested Developers
@@ -141,7 +143,12 @@ const IdeaCard = ({ idea }) => {
               {/* INTERESTED IN BUILDING */}
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline">Interested in Building</Button>
+                  <Button
+                    variant="outline"
+                    className="bg-bgGray2 text-white border border-bgGray2"
+                  >
+                    Interested in Building
+                  </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
@@ -159,8 +166,11 @@ const IdeaCard = ({ idea }) => {
                 </DialogContent>
               </Dialog>
 
-              <Button variant="outline" size="sm">
-                <ThumbsUp className="mr-2 h-4 w-4" />
+              <Button
+                variant="outline"
+                className="bg-bgGray2 text-white border border-bgGray2"
+              >
+                <ArrowBigUp className="mr-2 h-6 w-6" />
                 {idea?.likes}
               </Button>
             </div>
@@ -174,9 +184,9 @@ const IdeaCard = ({ idea }) => {
         open={isSuggestionDrawerOpen}
         onOpenChange={setIsSuggestionDrawerOpen}
       >
-        <DrawerContent>
+        <DrawerContent className="bg-bgGray">
           <DrawerHeader>
-            <DrawerTitle>Suggest Features</DrawerTitle>
+            <DrawerTitle className="text-white">Suggest Features</DrawerTitle>
             <DrawerDescription>
               What features would you like to see in this project?
             </DrawerDescription>
@@ -187,10 +197,10 @@ const IdeaCard = ({ idea }) => {
               className="min-h-[200px]"
             />
           </div>
-          <DrawerFooter>
-            <Button>Submit Suggestion</Button>
+          <DrawerFooter className="space-y-2">
+            <Button variant="outline">Submit Suggestion</Button>
             <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button className="border border-textGray">Cancel</Button>
             </DrawerClose>
           </DrawerFooter>
         </DrawerContent>
@@ -201,7 +211,7 @@ const IdeaCard = ({ idea }) => {
         open={isViewSuggestionsDrawerOpen}
         onOpenChange={setIsViewSuggestionsDrawerOpen}
       >
-        <DrawerContent>
+        <DrawerContent className="bg-bgGray">
           <DrawerHeader>
             <DrawerTitle className="text-2xl">View Suggestions</DrawerTitle>
             <DrawerDescription className="text-lg">
@@ -228,7 +238,7 @@ const IdeaCard = ({ idea }) => {
         open={isViewCollaboratorsDrawerOpen}
         onOpenChange={setIsViewCollaboratorsDrawerOpen}
       >
-        <DrawerContent>
+        <DrawerContent className="bg-bgGray">
           <DrawerHeader>
             <DrawerTitle>View Interested Builders</DrawerTitle>
             <DrawerDescription>

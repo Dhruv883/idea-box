@@ -110,7 +110,7 @@ export default function Home() {
     });
   };
   return (
-    <div className={`flex flex-col min-h-screen bg-white text-black relative`}>
+    <div className={`flex flex-col min-h-screen relative`}>
       <Navbar />
       <main className="flex-1">
         <section className="min-h-screen w-full flex justify-center pt-24">
@@ -295,7 +295,7 @@ export default function Home() {
               />
             </div>
 
-            <Button type="submit" className="w-full py-6 text-lg">
+            <Button type="submit" className="w-full py-4 text-lg">
               Submit Open Source Project
             </Button>
           </form>

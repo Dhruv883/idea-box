@@ -93,7 +93,6 @@ export default function Home() {
       title: event.target.title.value,
       domain: event.target.domain.value,
       description: event.target.description.value,
-      audience: event.target.audience.value,
       features,
       tags,
     };
@@ -106,7 +105,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-black relative">
+    <div className="flex flex-col min-h-screen  relative">
       <Navbar />
       <main className="flex-1">
         <section className="border border-black min-h-screen w-full flex justify-center pt-24">
@@ -147,16 +146,6 @@ export default function Home() {
                 placeholder="Brief Description of your project"
                 required
                 minLength={25}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="audience">Target Audience *</Label>
-              <input
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                id="audience"
-                placeholder="Describe your target audience"
-                required
               />
             </div>
 
@@ -253,7 +242,9 @@ export default function Home() {
             </div>
 
             <div className="flex justify-center">
-              <Button type="submit">Submit</Button>
+              <Button className="w-full py-4 text-lg" type="submit">
+                Submit
+              </Button>
             </div>
           </form>
         </section>

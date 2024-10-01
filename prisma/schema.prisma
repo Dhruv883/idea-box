@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int          @id @default(autoincrement())
+  name            String
+  email           String       @unique
+  image           String
+  ideas           Ideas[]      @relation("UserIdeas")
+  upvotedIdeas    Ideas[]      @relation("UserUpvotedIdeas")
+  interestedIdeas Ideas[]      @relation("UserInterestedIdeas")
+  projects        Projects[]
+  suggestions     Suggestion[]
+  profiles        UserProfile[]
+  bio             String?
+  username        String?
+}
+
+model UserProfile {
+  id        Int      @id @default(autoincrement())
+  profile   String  
+  type      ProfileType  
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
+
+enum ProfileType {
+  Dev
+  Medium
+  Hashnode
+  StackOverflow
+  Github
+  LinkedIn
+  Twitter
+  Portfolio
+}
+
+
+model Ideas {
+  id           Int          @id @default(autoincrement())
+  title        String       @unique
+  domain       String
+  description  String
+  features     Features[]
+  tags         IdeaTags[]
+  createdAt    DateTime     @default(now())
+  user         User         @relation(fields: [userId], references: [id], name: "UserIdeas")
+  userId       Int
+  upvotes      Int
+  suggestions  Suggestion[]
+  upvotedBy    User[]       @relation(name: "UserUpvotedIdeas")
+  interestedBy User[]       @relation(name: "UserInterestedIdeas")
+}
+
+model Features {
+  id      Int    @id @default(autoincrement())
+  feature String
+  idea    Ideas  @relation(fields: [ideaId], references: [id])
+  ideaId  Int
+}
+
+model IdeaTags {
+  id     Int    @id @default(autoincrement())
+  tag    String
+  idea   Ideas  @relation(fields: [ideaId], references: [id])
+  ideaId Int
+}
+
+model Suggestion {
+  id         Int      @id @default(autoincrement())
+  suggestion String
+  createdAt  DateTime @default(now())
+  idea       Ideas    @relation(fields: [ideaId], references: [id])
+  ideaId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+}
+
+model Projects {
+  id            Int           @id @default(autoincrement())
+  name          String
+  title         String
+  domain        String
+  description   String
+  repositoryURL String        @unique
+  guidelines    String
+  technologies  Technology[]
+  tags          ProjectTags[]
+  createdAt     DateTime      @default(now())
+  user          User          @relation(fields: [userId], references: [id])
+  userId        Int
+}
+
+model Technology {
+  id         Int      @id @default(autoincrement())
+  technology String
+  project    Projects @relation(fields: [projectId], references: [id])
+  projectId  Int
+}
+
+model ProjectTags {
+  id        Int      @id @default(autoincrement())
+  tag       String
+  idea      Projects @relation(fields: [projectId], references: [id])
+  projectId Int
+}

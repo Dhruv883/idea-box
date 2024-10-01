@@ -34,6 +34,11 @@ export const authOptions = {
       }
       return session;
     },
+
+    // async signIn(data) {
+    //   console.log("Sign In Data: ", data);
+    //   return true;
+    // },
   },
 };
 

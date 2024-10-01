@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusCircle, Edit2, ExternalLink } from "lucide-react";
 import Image from "next/image";
+import Navbar from "@/components/Navbar";
 
 const initialUser = {
   name: "Jane Doe",
@@ -140,209 +141,220 @@ export default function UserProfile() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center space-x-4 mb-8">
-          <Avatar className="w-24 h-24">
-            <AvatarImage src={user.avatar} alt={user.name} />
-            <AvatarFallback>
-              {user.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <h1 className="text-2xl font-bold">{user.name}</h1>
-            {user.bio ? (
-              <div className="mt-2 flex justify-between items-center">
-                <p className="text-sm">{user.bio}</p>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsBioDialogOpen(true)}
-                  className="ml-2"
-                >
-                  <Edit2 className="h-4 w-4" />
-                  <span className="sr-only">Update bio</span>
-                </Button>
-              </div>
-            ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsBioDialogOpen(true)}
-                className="mt-2"
-              >
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Add bio
-              </Button>
-            )}
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Connected Platforms</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {platforms.map((platform) => (
-              <Card
-                key={platform.id}
-                className="flex items-center justify-between p-4 h-16"
-              >
-                <div className="flex items-center space-x-3">
-                  <Image
-                    src={`/icons/${platform.icon}.svg`}
-                    width={25}
-                    height={25}
-                    alt={platform.name}
-                  />
-                  <span className="font-medium text-sm">{platform.name}</span>
-                </div>
-                {platform.connected ? (
-                  <div className="flex space-x-2">
+    <div className={`flex flex-col min-h-screen text-black relative`}>
+      <Navbar />
+      <main className="flex-1 pt-16">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center space-x-4 mb-8">
+              <Avatar className="w-24 h-24">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback>
+                  {user.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h1 className="text-2xl font-bold">{user.name}</h1>
+                {user.bio ? (
+                  <div className="mt-2 flex justify-between items-center">
+                    <p className="text-sm">{user.bio}</p>
                     <Button
                       variant="ghost"
                       size="sm"
-                      asChild
-                      className="p-0 h-8 w-8"
-                    >
-                      <a
-                        href={platform.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                        <span className="sr-only">Visit {platform.name}</span>
-                      </a>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleEdit(platform)}
-                      className="p-0 h-8 w-8"
+                      onClick={() => setIsBioDialogOpen(true)}
+                      className="ml-2"
                     >
                       <Edit2 className="h-4 w-4" />
-                      <span className="sr-only">Edit {platform.name}</span>
+                      <span className="sr-only">Update bio</span>
                     </Button>
                   </div>
                 ) : (
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleConnect(platform.id)}
-                    className="p-0 h-8 w-8"
+                    onClick={() => setIsBioDialogOpen(true)}
+                    className="mt-2"
                   >
-                    <PlusCircle className="h-4 w-4" />
-                    <span className="sr-only">Connect {platform.name}</span>
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Add bio
                   </Button>
                 )}
-              </Card>
-            ))}
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold mb-4">
+                Connected Platforms
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {platforms.map((platform) => (
+                  <Card
+                    key={platform.id}
+                    className="flex items-center justify-between p-4 h-16"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Image
+                        src={`/icons/${platform.icon}.svg`}
+                        width={25}
+                        height={25}
+                        alt={platform.name}
+                      />
+                      <span className="font-medium text-sm">
+                        {platform.name}
+                      </span>
+                    </div>
+                    {platform.connected ? (
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          asChild
+                          className="p-0 h-8 w-8"
+                        >
+                          <a
+                            href={platform.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            <span className="sr-only">
+                              Visit {platform.name}
+                            </span>
+                          </a>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEdit(platform)}
+                          className="p-0 h-8 w-8"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                          <span className="sr-only">Edit {platform.name}</span>
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleConnect(platform.id)}
+                        className="p-0 h-8 w-8"
+                      >
+                        <PlusCircle className="h-4 w-4" />
+                        <span className="sr-only">Connect {platform.name}</span>
+                      </Button>
+                    )}
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold mb-4">Ideas</h2>
+              <Tabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full"
+              >
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="liked">Liked Ideas</TabsTrigger>
+                  <TabsTrigger value="interested">Interested Ideas</TabsTrigger>
+                </TabsList>
+                <TabsContent value="liked">
+                  {likedIdeas.map((idea) => (
+                    <Card key={idea.id} className="mb-4 p-4">
+                      <h3 className="font-semibold">{idea.title}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        by @{idea.author}
+                      </p>
+                    </Card>
+                  ))}
+                </TabsContent>
+                <TabsContent value="interested">
+                  {interestedIdeas.map((idea) => (
+                    <Card key={idea.id} className="mb-4 p-4">
+                      <h3 className="font-semibold">{idea.title}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        by @{idea.author}
+                      </p>
+                    </Card>
+                  ))}
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit {editingPlatform?.name} Link</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSave} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-url">URL</Label>
+                    <Input
+                      id="edit-url"
+                      name="url"
+                      defaultValue={editingPlatform?.url}
+                      placeholder={`https://${editingPlatform?.id}.com/${user.username}`}
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Save</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog
+              open={isConnectDialogOpen}
+              onOpenChange={setIsConnectDialogOpen}
+            >
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Connect {editingPlatform?.name}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSave} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="connect-url">URL</Label>
+                    <Input
+                      id="connect-url"
+                      name="url"
+                      defaultValue={editingPlatform?.url}
+                      placeholder={`https://${editingPlatform?.id}.com/${user.username}`}
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Connect</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog open={isBioDialogOpen} onOpenChange={setIsBioDialogOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{user.bio ? "Update" : "Add"} Bio</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleBioSave} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="bio">Bio</Label>
+                    <Textarea
+                      id="bio"
+                      name="bio"
+                      defaultValue={user.bio}
+                      placeholder="Tell us about yourself..."
+                      rows={4}
+                    />
+                  </div>
+                  <Button type="submit">Save</Button>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
-
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Ideas</h2>
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="liked">Liked Ideas</TabsTrigger>
-              <TabsTrigger value="interested">Interested Ideas</TabsTrigger>
-            </TabsList>
-            <TabsContent value="liked">
-              {likedIdeas.map((idea) => (
-                <Card key={idea.id} className="mb-4 p-4">
-                  <h3 className="font-semibold">{idea.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    by @{idea.author}
-                  </p>
-                </Card>
-              ))}
-            </TabsContent>
-            <TabsContent value="interested">
-              {interestedIdeas.map((idea) => (
-                <Card key={idea.id} className="mb-4 p-4">
-                  <h3 className="font-semibold">{idea.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    by @{idea.author}
-                  </p>
-                </Card>
-              ))}
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Edit {editingPlatform?.name} Link</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSave} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-url">URL</Label>
-                <Input
-                  id="edit-url"
-                  name="url"
-                  defaultValue={editingPlatform?.url}
-                  placeholder={`https://${editingPlatform?.id}.com/${user.username}`}
-                />
-              </div>
-              <DialogFooter>
-                <Button type="submit">Save</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog
-          open={isConnectDialogOpen}
-          onOpenChange={setIsConnectDialogOpen}
-        >
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Connect {editingPlatform?.name}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSave} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="connect-url">URL</Label>
-                <Input
-                  id="connect-url"
-                  name="url"
-                  defaultValue={editingPlatform?.url}
-                  placeholder={`https://${editingPlatform?.id}.com/${user.username}`}
-                />
-              </div>
-              <DialogFooter>
-                <Button type="submit">Connect</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={isBioDialogOpen} onOpenChange={setIsBioDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{user.bio ? "Update" : "Add"} Bio</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleBioSave} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="bio">Bio</Label>
-                <Textarea
-                  id="bio"
-                  name="bio"
-                  defaultValue={user.bio}
-                  placeholder="Tell us about yourself..."
-                  rows={4}
-                />
-              </div>
-              <Button type="submit">Save</Button>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+      </main>
     </div>
   );
 }

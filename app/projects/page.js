@@ -116,11 +116,11 @@ export default function Home() {
     setIsFilterOpen(false);
   };
   return (
-    <div className={`flex flex-col min-h-screen text-black relative`}>
+    <div className={`flex flex-col min-h-screen  relative`}>
       <Navbar />
       <main className="flex-1 pt-16">
         <div className="mx-auto p-4 sm:p-6 lg:p-8 ">
-          <h1 className="text-4xl mb-4 font-bold text-center text-gray-800 dark:text-gray-100">
+          <h1 className="text-4xl mb-4 font-bold text-center ">
             Explore Open Source Projects
           </h1>
 

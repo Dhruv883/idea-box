@@ -2,6 +2,7 @@ import "./globals.css";
 import { Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import NextAuthProvider from "./NextAuthProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -21,8 +22,15 @@ export default function RootLayout({ children }) {
       </head>
       <html lang="en">
         <body className={`${poppins.className} antialiased scroll-smooth`}>
-          <Toaster />
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster />
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </NextAuthProvider>

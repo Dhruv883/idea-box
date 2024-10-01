@@ -8,17 +8,18 @@ export default function Home() {
   const { data, status } = useSession();
 
   return (
-    <div className={`flex flex-col min-h-screen text-black relative`}>
+    <div className={`flex flex-col min-h-screen relative`}>
       <Navbar />
 
       <main className="flex-grow flex flex-col items-center justify-center text-center">
         <h1 className="text-5xl font-bold mb-6">Login to IdeaHub</h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl">
+        <p className="text-xl text-gray-400 mb-8 max-w-2xl">
           Connect with innovators, share your ideas, and collaborate on exciting
           projects. Turn visions into reality.
         </p>
         <Button
-          className="w-full max-w-md py-6 gap-3 text-lg bg-black text-white hover:bg-gray-800 transition-colors"
+          variant="secondary"
+          className="w-full max-w-md py-6 gap-3 text-lg"
           onClick={() => signIn("google")}
         >
           <Image src="/google.svg" width={20} height={20} alt="Google" />

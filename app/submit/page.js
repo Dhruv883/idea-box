@@ -23,7 +23,7 @@ export default function Home() {
   ];
 
   return (
-    <div className={`flex flex-col min-h-screen bg-white text-black relative`}>
+    <div className={`flex flex-col min-h-screen relative`}>
       <Navbar />
       <main className="flex-1">
         <section className="min-h-screen w-full flex justify-center pt-24">
@@ -37,20 +37,16 @@ export default function Home() {
                   <div key={idx} className="cursor-pointer">
                     <Link href={`/submit/${item.link}`}>
                       <Card
-                        className={`group w-96 h-full hover:bg-bgGray hover:text-white hover:border-[#242424]`}
+                        className={`group w-96 h-full bg-bgGray text-white border-[#242424]`}
                       >
                         <CardContent className="flex flex-col items-center p-6 h-full text-center">
-                          <span
-                            className={`p-3 rounded-full mb-4 bg-gray-200 group-hover:bg-bgGray2`}
-                          >
+                          <span className={`p-3 rounded-full mb-4 bg-bgGray2`}>
                             {item.icon}
                           </span>
                           <h2 className="text-xl font-semibold mb-2">
                             {item.title}
                           </h2>
-                          <p className="text-gray-500 group-hover:text-textGray">
-                            {item.content}
-                          </p>
+                          <p className="text-textGray">{item.content}</p>
                         </CardContent>
                       </Card>
                     </Link>
