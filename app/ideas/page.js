@@ -33,6 +33,7 @@ const mockIdeas = [
     description:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
     tags: ["Desktop", "Developer Tools"],
+    features: ["Consequuntur est eos", "Consequuntur est eos"],
     likes: 156,
     comments: 23,
     collaborators: [
@@ -99,6 +100,13 @@ const mockIdeas = [
     title: "AI-powered Task Manager",
     description:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
+    features: [
+      "Syntax highlighting for multiple programming languages",
+      "Code auto-completion and suggestions",
+      "Integrated terminal",
+      "Git integration",
+      "Customizable themes and extensions",
+    ],
     tags: ["AI", "Mobile", "Productivity"],
     likes: 89,
     comments: 12,
@@ -132,6 +140,13 @@ const mockIdeas = [
     title: "Decentralized Social Media Platform",
     description:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
+    features: [
+      "Syntax highlighting for multiple programming languages",
+      "Code auto-completion and suggestions",
+      "Integrated terminal",
+      "Git integration",
+      "Customizable themes and extensions",
+    ],
     tags: ["Web", "Blockchain", "Social"],
     likes: 201,
     comments: 34,
@@ -179,6 +194,7 @@ const mockIdeas = [
       "Open Source Code Editor Open Source Code Editor Open Source Code Editor",
     description:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
+    features: ["Consequuntur est eos", "Consequuntur est eos"],
     tags: ["Desktop", "Developer Tools"],
     likes: 156,
     comments: 23,

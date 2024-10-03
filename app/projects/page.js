@@ -22,63 +22,83 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import ProjectCard from "@/components/ProjectCard";
 
 const mockProjects = [
   {
     id: 1,
-    name: "Sample Name",
-    title:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit Veritatis facere",
+    name: "E-Learning Platform",
+    title: "Interactive course creation platform",
     description:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora",
-    domain: "Healthcare",
-    url: "https://github.com/Dhruv883/idea-hub",
-    techStack: ["Next.js", "PostgreSQL", "TailwindCSS", "Prisma"],
-    tags: ["Desktop", "Developer Tools"],
-    guidelines:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur adipisicing elit Veritatis facere",
+      "Platform to create and share online courses with quizzes and video support.",
+    domain: "Education",
+    repoUrl: "https://github.com/example/ELearningPlatform",
+    techStack: ["Django", "React.js", "PostgreSQL", "Redis"],
+    tags: ["Education", "E-Learning", "Web"],
+    contributorGuidelines:
+      "Contributions should follow the existing coding style and include documentation for new features.",
+    submittedBy: "Emily Clark",
+    upvotes: 305,
   },
   {
     id: 2,
-    name: "Sample Name",
-    title:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit Veritatis facere",
+    name: "CollabMind",
+    title: "Real-time collaboration platform",
     description:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora",
-    domain: "Healthcare",
-    url: "https://github.com/Dhruv883/idea-hub",
-    techStack: ["Next.js", "PostgreSQL", "TailwindCSS", "Prisma"],
-    tags: ["Desktop", "Developer Tools"],
-    guidelines:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur adipisicing elit Veritatis facere",
+      "Tool for teams to collaborate on documents, projects, and presentations with version control.",
+    domain: "Web",
+    repoUrl: "https://github.com/example/CollabMind",
+    techStack: ["React.js", "Node.js", "WebSocket", "PostgreSQL"],
+    tags: ["Collaboration", "Productivity", "Web"],
+    contributorGuidelines:
+      "Fork the repository, make changes in your local branch, and submit a PR. Include tests for new features.",
+    submittedBy: "John Doe",
+    upvotes: 215,
   },
   {
     id: 3,
-    name: "Sample Name",
-    title:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit Veritatis facere",
+    name: "DevOps Automation Tool",
+    title: "Infrastructure automation tool",
     description:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora",
-    domain: "Healthcare",
-    url: "https://github.com/Dhruv883/idea-hub",
-    techStack: ["Next.js", "PostgreSQL", "TailwindCSS", "Prisma"],
-    tags: ["Desktop", "Developer Tools"],
-    guidelines:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur adipisicing elit Veritatis facere",
+      "Automates infrastructure deployment, monitoring, and scaling using a single configuration file.",
+    domain: "Infrastructure",
+    repoUrl: "https://github.com/example/DevOpsTool",
+    techStack: ["Terraform", "Docker", "AWS", "Kubernetes"],
+    tags: ["Automation", "DevOps", "Infrastructure"],
+    contributorGuidelines:
+      "Follow the contribution guidelines and ensure changes pass all CI/CD checks before submitting a PR.",
+    submittedBy: "Jane Smith",
+    upvotes: 320,
   },
   {
     id: 4,
-    name: "Sample Name",
-    title:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit Veritatis facere",
+    name: "AI-Powered Chatbot",
+    title: "NLP-based intelligent chatbot",
     description:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora",
-    domain: "Healthcare",
-    url: "https://github.com/Dhruv883/idea-hub",
-    techStack: ["Next.js", "PostgreSQL", "TailwindCSS", "Prisma"],
-    tags: ["Desktop", "Developer Tools"],
-    guidelines:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas temporaLorem ipsum dolor sit amet consectetur adipisicing elit Veritatis facere",
+      "Open-source chatbot using natural language processing to provide intelligent responses.",
+    domain: "AI",
+    repoUrl: "https://github.com/example/AIPoweredChatbot",
+    techStack: ["Python", "TensorFlow", "NLTK", "Flask"],
+    tags: ["AI", "Chatbot", "Natural Language Processing"],
+    contributorGuidelines:
+      "Contributions are welcome! Ensure code adheres to PEP8 standards and include test cases for new features.",
+    submittedBy: "Samuel Lee",
+    upvotes: 178,
+  },
+  {
+    id: 5,
+    name: "Crypto Wallet",
+    title: "Secure multi-asset cryptocurrency wallet",
+    description:
+      "Open-source wallet supporting multiple digital assets with enhanced security.",
+    domain: "Blockchain",
+    repoUrl: "https://github.com/example/CryptoWallet",
+    techStack: ["React Native", "Solidity", "Ethereum", "Web3.js"],
+    tags: ["Blockchain", "Cryptocurrency", "Mobile"],
+    contributorGuidelines:
+      "Submit PRs for security patches or feature enhancements. Ensure the wallet code complies with the latest security standards.",
+    submittedBy: "Lucy Adams",
+    upvotes: 145,
   },
 ];
 
@@ -195,6 +215,12 @@ export default function Home() {
                 </div>
               </SheetContent>
             </Sheet>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-16 items-center justify-items-center">
+            {projects.map((project, idx) => (
+              <ProjectCard project={project} key={idx} />
+            ))}
           </div>
         </div>
       </main>

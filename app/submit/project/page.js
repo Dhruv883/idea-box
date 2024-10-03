@@ -15,44 +15,15 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { Tags, TechStackTags } from "@/constants";
 
 export default function Home() {
   const [techStack, setTechStack] = useState([]);
   const [tags, setTags] = useState([]);
   const { toast } = useToast();
-
-  const suggestedTechStack = [
-    "JavaScript",
-    "TypeScript",
-    "Python",
-    "Java",
-    "Go",
-    "Rust",
-    "C++",
-    "React",
-    "Vue.js",
-    "Angular",
-    "Node.js",
-    "Django",
-    "Flask",
-    "Spring",
-    "PostgreSQL",
-    "MongoDB",
-    "Redis",
-    "Docker",
-    "Kubernetes",
-    "TensorFlow",
-  ];
-  const preExistingTags = [
-    "Web",
-    "Mobile",
-    "Desktop",
-    "CLI",
-    "AI",
-    "Data Science",
-    "DevOps",
-    "Security",
-  ];
+  const { data, status } = useSession();
 
   const addTechStack = (tech) => {
     if (!techStack.includes(tech)) {
@@ -103,12 +74,40 @@ export default function Home() {
       techStack,
       tags,
     };
-    console.log("Form submitted:", formData);
-    return toast({
-      title: "Success",
-      description: "Project idea submitted successfully!",
-    });
+
+    return postProject(formData);
   };
+
+  const postProject = async (formData) => {
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/submit/project`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${data.accessToken}`,
+          },
+        }
+      );
+
+      console.log(response);
+
+      toast({
+        title: "Success",
+        description: "Project submitted successfully!",
+      });
+    } catch (error) {
+      console.log("Error", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit your Project. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className={`flex flex-col min-h-screen relative`}>
       <Navbar />
@@ -205,12 +204,12 @@ export default function Home() {
                   <SelectValue placeholder="Select or add tech" />
                 </SelectTrigger>
                 <SelectContent>
-                  {suggestedTechStack.map((tech) => (
+                  <SelectItem value="custom">Add custom tech...</SelectItem>
+                  {TechStackTags.map((tech) => (
                     <SelectItem key={tech} value={tech}>
                       {tech}
                     </SelectItem>
                   ))}
-                  <SelectItem value="custom">Add custom tech...</SelectItem>
                 </SelectContent>
               </Select>
               {techStack.includes("custom") && (
@@ -255,12 +254,12 @@ export default function Home() {
                   <SelectValue placeholder="Select or add a tag" />
                 </SelectTrigger>
                 <SelectContent>
-                  {preExistingTags.map((tag) => (
+                  <SelectItem value="custom">Add custom tag...</SelectItem>
+                  {Tags.map((tag) => (
                     <SelectItem key={tag} value={tag}>
                       {tag}
                     </SelectItem>
                   ))}
-                  <SelectItem value="custom">Add custom tag...</SelectItem>
                 </SelectContent>
               </Select>
               {tags.includes("custom") && (

@@ -77,75 +77,81 @@ const IdeaCard = ({ idea }) => {
         </div>
       </Card>
 
-      <Dialog
-        open={isDialogOpen}
-        onOpenChange={() => setIsDialogOpen(false)}
-        className="overflow-auto"
-      >
-        <DialogContent className="w-4/5 max-w-none max-h-none border-none bg-bgGray text-white">
-          <DialogHeader className="h-auto">
-            <DialogTitle className="text-center text-xl md:text-4xl mb-4 text-white">
-              {idea?.title}
+      <Dialog open={isDialogOpen} onOpenChange={() => setIsDialogOpen(false)}>
+        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none bg-bgGray text-white overflow-y-auto">
+          <DialogHeader className="h-auto mb-4 sm:mb-6">
+            <DialogTitle className="text-center text-xl sm:text-2xl md:text-4xl mb-2 sm:mb-4 text-white">
+              {idea.title}
             </DialogTitle>
-            <ScrollArea className="max-h-[200px] pr-4">
-              <DialogDescription className="text-center text-lg h-auto text-textGray">
-                {idea?.description}
-              </DialogDescription>
-              <ScrollBar orientation="vertical" />
-            </ScrollArea>
+            <DialogDescription className="text-center text-sm sm:text-base md:text-lg text-textGray">
+              {idea.description}
+            </DialogDescription>
           </DialogHeader>
-          <ScrollArea className="max-h-56 pr-4">
-            <div className="text-white">
+
+          {/* Features Section */}
+          <div>
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4 text-white">
+              Features:
+            </h3>
+            <ul className="list-disc pl-5 text-textGray text-sm sm:text-base space-y-1 sm:space-y-2">
+              {idea.features.map((feature, index) => (
+                <li key={index}>{feature}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-6 sm:space-y-8">
+            <div className="text-white text-sm sm:text-base">
               Submitted by -{" "}
               <Link href="/u/" className="hover:underline">
                 John Doe
               </Link>
             </div>
 
-            <div className="flex flex-wrap gap-2 mt-4 items-center">
-              <span className="font-medium text-white">Tags: </span>
-              {idea?.tags.map((tag) => (
+            <div className="flex flex-wrap gap-2 items-center">
+              <span className="font-medium text-white text-sm sm:text-base">
+                Tags:{" "}
+              </span>
+              {idea.tags.map((tag) => (
                 <Badge
                   key={tag}
-                  className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2"
+                  className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2 text-xs sm:text-sm"
                 >
                   {tag}
                 </Badge>
               ))}
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="flex flex-wrap gap-2 sm:gap-4">
               <Button
                 variant="outline"
                 onClick={() => setIsSuggestionDrawerOpen(true)}
-                className="bg-bgGray2 text-white border border-bgGray2"
+                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
               >
-                <MessageSquare className="mr-2 h-4 w-4" />
+                <MessageSquare className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 Suggest Features
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setIsViewSuggestionsDrawerOpen(true)}
-                className="bg-bgGray2 text-white border border-bgGray2"
+                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
               >
-                <MessageSquare className="mr-2 h-4 w-4" />
+                <MessageSquare className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 View Suggestions
               </Button>
-
               <Button
                 variant="outline"
                 onClick={() => setIsViewCollaboratorsDrawerOpen(true)}
-                className="bg-bgGray2 text-white border border-bgGray2"
+                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
               >
-                <Users className="mr-2 h-4 w-4" />
+                <Users className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 View Interested Developers
               </Button>
-              {/* INTERESTED IN BUILDING */}
               <Dialog>
                 <DialogTrigger asChild>
                   <Button
                     variant="outline"
-                    className="bg-bgGray2 text-white border border-bgGray2"
+                    className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
                   >
                     Interested in Building
                   </Button>
@@ -159,23 +165,20 @@ const IdeaCard = ({ idea }) => {
                       fellow individuals
                     </DialogDescription>
                   </DialogHeader>
-
                   <DialogFooter>
                     <Button type="submit">I'm Still Interested</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-
               <Button
                 variant="outline"
-                className="bg-bgGray2 text-white border border-bgGray2"
+                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
               >
-                <ArrowBigUp className="mr-2 h-6 w-6" />
-                {idea?.likes}
+                <ArrowBigUp className="mr-2 h-4 w-4 sm:h-6 sm:w-6" />
+                {idea.likes}
               </Button>
             </div>
-            <ScrollBar orientation="vertical" />
-          </ScrollArea>
+          </div>
         </DialogContent>
       </Dialog>
 

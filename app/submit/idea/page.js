@@ -13,22 +13,17 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/hooks/use-toast";
+import { Tags } from "@/constants";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
+  const { data, status } = useSession();
   const { toast } = useToast();
   const [features, setFeatures] = useState([]);
   const [tags, setTags] = useState([]);
   const [newFeature, setNewFeature] = useState("");
   const [editingFeatureIndex, setEditingFeatureIndex] = useState(null);
-
-  const preExistingTags = [
-    "AI",
-    "Full Stack",
-    "Mobile",
-    "Web",
-    "IoT",
-    "Blockchain",
-  ];
 
   const addFeature = (event) => {
     event.preventDefault();
@@ -97,12 +92,42 @@ export default function Home() {
       tags,
     };
 
-    console.log("Form submitted:", formData);
-    return toast({
-      title: "Success",
-      description: "Project idea submitted successfully!",
-    });
+    return postIdea(formData);
   };
+
+  const postIdea = async (formData) => {
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/submit/idea`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${data.accessToken}`,
+          },
+        }
+      );
+
+      console.log(response);
+
+      toast({
+        title: "Success",
+        description: "Project idea submitted successfully!",
+      });
+    } catch (error) {
+      console.log("Error", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit your idea. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  if (status == "loading") {
+    return <div>Loading....</div>;
+  }
 
   return (
     <div className="flex flex-col min-h-screen  relative">
@@ -164,6 +189,7 @@ export default function Home() {
                           variant="ghost"
                           size="sm"
                           onClick={() => editFeature(index)}
+                          type="button"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -171,6 +197,7 @@ export default function Home() {
                           variant="ghost"
                           size="sm"
                           onClick={() => removeFeature(index)}
+                          type="button"
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -213,12 +240,12 @@ export default function Home() {
                   <SelectValue placeholder="Select or add a tag" />
                 </SelectTrigger>
                 <SelectContent>
-                  {preExistingTags.map((tag) => (
+                  <SelectItem value="custom">Add custom tag...</SelectItem>
+                  {Tags.map((tag) => (
                     <SelectItem key={tag} value={tag}>
                       {tag}
                     </SelectItem>
                   ))}
-                  <SelectItem value="custom">Add custom tag...</SelectItem>
                 </SelectContent>
               </Select>
               {tags.includes("custom") && (

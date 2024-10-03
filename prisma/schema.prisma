@@ -14,14 +14,14 @@ datasource db {
 }
 
 model User {
-  id              Int          @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   name            String
-  email           String       @unique
+  email           String        @unique
   image           String
-  ideas           Ideas[]      @relation("UserIdeas")
-  upvotedIdeas    Ideas[]      @relation("UserUpvotedIdeas")
-  interestedIdeas Ideas[]      @relation("UserInterestedIdeas")
-  projects        Projects[]
+  ideas           Idea[]        @relation("UserIdea")
+  upvotedIdeas    Idea[]        @relation("UserUpvotedIdea")
+  interestedIdeas Idea[]        @relation("UserInterestedIdea")
+  projects        Project[]
   suggestions     Suggestion[]
   profiles        UserProfile[]
   bio             String?
@@ -29,11 +29,11 @@ model User {
 }
 
 model UserProfile {
-  id        Int      @id @default(autoincrement())
-  profile   String  
-  type      ProfileType  
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  id      Int         @id @default(autoincrement())
+  profile String
+  type    ProfileType
+  user    User        @relation(fields: [userId], references: [id])
+  userId  Int
 }
 
 enum ProfileType {
@@ -47,34 +47,33 @@ enum ProfileType {
   Portfolio
 }
 
-
-model Ideas {
+model Idea {
   id           Int          @id @default(autoincrement())
   title        String       @unique
   domain       String
   description  String
-  features     Features[]
-  tags         IdeaTags[]
+  features     Feature[]
+  tags         IdeaTag[]
   createdAt    DateTime     @default(now())
-  user         User         @relation(fields: [userId], references: [id], name: "UserIdeas")
+  user         User         @relation(fields: [userId], references: [id], name: "UserIdea")
   userId       Int
-  upvotes      Int
+  upvotes      Int          @default(0)
   suggestions  Suggestion[]
-  upvotedBy    User[]       @relation(name: "UserUpvotedIdeas")
-  interestedBy User[]       @relation(name: "UserInterestedIdeas")
+  upvotedBy    User[]       @relation(name: "UserUpvotedIdea")
+  interestedBy User[]       @relation(name: "UserInterestedIdea")
 }
 
-model Features {
+model Feature {
   id      Int    @id @default(autoincrement())
   feature String
-  idea    Ideas  @relation(fields: [ideaId], references: [id])
+  idea    Idea   @relation(fields: [ideaId], references: [id])
   ideaId  Int
 }
 
-model IdeaTags {
+model IdeaTag {
   id     Int    @id @default(autoincrement())
   tag    String
-  idea   Ideas  @relation(fields: [ideaId], references: [id])
+  idea   Idea   @relation(fields: [ideaId], references: [id])
   ideaId Int
 }
 
@@ -82,37 +81,38 @@ model Suggestion {
   id         Int      @id @default(autoincrement())
   suggestion String
   createdAt  DateTime @default(now())
-  idea       Ideas    @relation(fields: [ideaId], references: [id])
+  idea       Idea     @relation(fields: [ideaId], references: [id])
   ideaId     Int
   user       User     @relation(fields: [userId], references: [id])
   userId     Int
 }
 
-model Projects {
-  id            Int           @id @default(autoincrement())
+model Project {
+  id            Int          @id @default(autoincrement())
   name          String
   title         String
   domain        String
   description   String
-  repositoryURL String        @unique
+  repositoryURL String       @unique
   guidelines    String
   technologies  Technology[]
-  tags          ProjectTags[]
-  createdAt     DateTime      @default(now())
-  user          User          @relation(fields: [userId], references: [id])
+  tags          ProjectTag[]
+  createdAt     DateTime     @default(now())
+  user          User         @relation(fields: [userId], references: [id])
   userId        Int
+  upvotes       Int          @default(0)
 }
 
 model Technology {
-  id         Int      @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   technology String
-  project    Projects @relation(fields: [projectId], references: [id])
+  project    Project @relation(fields: [projectId], references: [id])
   projectId  Int
 }
 
-model ProjectTags {
-  id        Int      @id @default(autoincrement())
+model ProjectTag {
+  id        Int     @id @default(autoincrement())
   tag       String
-  idea      Projects @relation(fields: [projectId], references: [id])
+  idea      Project @relation(fields: [projectId], references: [id])
   projectId Int
 }
