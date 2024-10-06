@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,9 +13,70 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ArrowBigUp, Github } from "lucide-react";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ProjectCard = ({ project }) => {
+  const { data, status } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [userProjects, setUserProjects] = useState({
+    upvoted: [],
+  });
+  const [projectState, setProjectState] = useState({
+    upvoteCount: project.upvotes,
+    isUpvoted: false,
+  });
+
+  
+  const toggleUpvoteProject = async () => {
+
+    const newIsUpvoted = !projectState.isUpvoted;
+    const newUpvoteCount = newIsUpvoted ? projectState.upvoteCount + 1 : projectState.upvoteCount - 1;
+
+    setProjectState((prev) => ({ ...prev, isUpvoted: newIsUpvoted, upvoteCount: newUpvoteCount }));
+
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const endpoint = newIsUpvoted ? 'upvote' : 'removeUpvote';
+
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/projects/${endpoint}`,
+        { projectId: project.id },
+        {
+          headers: {
+            Authorization: `Bearer ${data?.accessToken}`,
+          },
+        }
+      );
+
+      const updatedProject = response.data;
+      setProjectState((prev) => ({ ...prev, upvoteCount: updatedProject.upvotes }));
+    } catch (error) {
+      console.error("Error updating upvote:", error);
+      setProjectState((prev) => ({ 
+        ...prev, 
+        isUpvoted: !newIsUpvoted, 
+        upvoteCount: newIsUpvoted ? newUpvoteCount - 1 : newUpvoteCount + 1 
+      }));
+    }
+  };
+
+  useEffect(() => {
+    if (data && data.user) {
+      setUserProjects({
+        upvoted: data.user.upvotedProjects?.map((project) => project.id) || [],
+      });
+    }
+  }, [data, status]);
+
+  useEffect(() => {
+    setProjectState((prev) => ({
+      ...prev,
+      isUpvoted: userProjects?.upvoted.includes(project.id),
+    }));
+  }, [userProjects, project.id]);
 
   return (
     <>
@@ -37,16 +98,60 @@ const ProjectCard = ({ project }) => {
           </div>
           <div className="flex items-center justify-between gap-1">
             <div className="flex flex-wrap gap-2 h-6 overflow-hidden w-full">
-              {project.tags.slice(0, 3).map((obj) => (
-                <Badge
-                  key={obj.id}
-                  className="bg-bgGray2 hover:bg-bgGray2 text-textGray"
-                >
-                  {obj.tag}
-                </Badge>
-              ))}
+              {project.tags.slice(0,1).map((obj, index) => (
+                    <Badge
+                      key={obj.id}
+                      className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
+                    >
+                      {obj.tag}
+                    </Badge>
+                  ))}
+                  {project.tags.length > 1 && (
+                    <Badge
+                      className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
+                    >
+                      +{project.tags.length - 1}
+                    </Badge>
+                  )}
             </div>
-            <div className="flex items-center gap-4 text-sm w-1/3 justify-center pb-1">
+            <div className="flex items-center gap-4 ">
+              <motion.div
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <Button
+                  variant="outline"
+                  className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
+                  onClick={toggleUpvoteProject}
+                >
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={projectState.isUpvoted ? "upvoted" : "not-upvoted"}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ArrowBigUp
+                        className={`h-3 w-3 sm:h-4 sm:w-4 ${
+                          projectState.isUpvoted ? "fill-current" : ""
+                        }`}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={projectState.upvoteCount}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {projectState.upvoteCount}
+                    </motion.span>
+                  </AnimatePresence>
+                </Button>
+              </motion.div>
               <Button size="sm" onClick={() => setIsDialogOpen(true)}>
                 View Details
               </Button>
@@ -130,13 +235,45 @@ const ProjectCard = ({ project }) => {
                 </a>
               </Button>
 
-              <Button
-                variant="outline"
-                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
+              <motion.div
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <ArrowBigUp className="mr-2 h-4 w-4 sm:h-6 sm:w-6" />
-                {project.upvotes}
-              </Button>
+                <Button
+                  variant="outline"
+                  className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1"
+                  onClick={toggleUpvoteProject}
+                >
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={projectState.isUpvoted ? "upvoted" : "not-upvoted"}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ArrowBigUp
+                        className={`mr-2 h-4 w-4 sm:h-6 sm:w-6 ${
+                          projectState.isUpvoted ? "fill-current" : ""
+                        }`}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                  <div className="w-6 text-center">
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={projectState.upvoteCount}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {projectState.upvoteCount}
+                      </motion.span>
+                    </AnimatePresence>
+                  </div>
+                </Button>
+              </motion.div>
             </div>
           </div>
         </DialogContent>

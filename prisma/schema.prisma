@@ -22,6 +22,7 @@ model User {
   upvotedIdeas    Idea[]        @relation("UserUpvotedIdea")
   interestedIdeas Idea[]        @relation("UserInterestedIdea")
   projects        Project[]
+  upvotedProjects Project[]     @relation("UserUpvotedProject")
   suggestions     Suggestion[]
   profiles        UserProfile[]
   bio             String?
@@ -101,6 +102,7 @@ model Project {
   user          User         @relation(fields: [userId], references: [id])
   userId        Int
   upvotes       Int          @default(0)
+  upvotedBy     User[]       @relation(name: "UserUpvotedProject")
 }
 
 model Technology {

@@ -158,21 +158,6 @@ const mockProjects = [
     upvotes: 320,
   },
   {
-    id: 4,
-    name: "AI-Powered Chatbot",
-    title: "NLP-based intelligent chatbot",
-    description:
-      "Open-source chatbot using natural language processing to provide intelligent responses.",
-    domain: "AI",
-    repoUrl: "https://github.com/example/AIPoweredChatbot",
-    techStack: ["Python", "TensorFlow", "NLTK", "Flask"],
-    tags: ["AI", "Chatbot", "Natural Language Processing"],
-    contributorGuidelines:
-      "Contributions are welcome! Ensure code adheres to PEP8 standards and include test cases for new features.",
-    submittedBy: "Samuel Lee",
-    upvotes: 178,
-  },
-  {
     id: 5,
     name: "Crypto Wallet",
     title: "Secure multi-asset cryptocurrency wallet",

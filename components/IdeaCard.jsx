@@ -37,7 +37,6 @@ import axios from "axios";
 const IdeaCard = ({ idea }) => {
   const { data, status } = useSession();
 
-  // Grouping related state variables
   const [dialogState, setDialogState] = useState({ isOpen: false, type: null });
   const [drawerState, setDrawerState] = useState({
     suggestion: false,

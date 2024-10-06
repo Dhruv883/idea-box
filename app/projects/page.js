@@ -64,8 +64,7 @@ export default function Home() {
           Authorization: `Bearer ${data?.accessToken}`,
         },
       });
-      console.log(response);
-
+      
       setProjects(response.data.projects);
     } catch (error) {
       console.log("Error while fetching projects: ", error);
@@ -77,7 +76,6 @@ export default function Home() {
   }, []);
 
   if (status == "loading") return <div>loading</div>;
-  console.log(projects);
 
   return (
     <div className={`flex flex-col min-h-screen  relative`}>

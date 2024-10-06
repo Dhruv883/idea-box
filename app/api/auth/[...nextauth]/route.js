@@ -35,6 +35,7 @@ export const authOptions = {
         where: { email: token.email },
         include: {
           upvotedIdeas: true,
+          upvotedProjects: true,
           interestedIdeas: true,
           projects: true,
           ideas: true,
@@ -49,6 +50,7 @@ export const authOptions = {
         token.interestedIdeas = dbUser.interestedIdeas;
         token.projects = dbUser.projects;
         token.ideas = dbUser.ideas;
+        token.upvotedProjects = dbUser.upvotedProjects;
       }
       return token;
     },
@@ -64,6 +66,7 @@ export const authOptions = {
         session.user.upvotedIdeas = token.upvotedIdeas;
         session.user.interestedIdeas = token.interestedIdeas;
         session.user.projects = token.projects;
+        session.user.upvotedProjects = token.upvotedProjects;
         session.user.ideas = token.ideas;
       }
       return session;
