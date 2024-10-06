@@ -1,16 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 
 import {
@@ -25,228 +18,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import IdeaCard from "@/components/IdeaCard";
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
+import axios from "axios";
+// import { Tags } from "@/constants";
 
-const mockIdeas = [
-  {
-    id: 1,
-    title: "Open Source Code Editor",
-    description:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
-    tags: ["Desktop", "Developer Tools"],
-    features: ["Consequuntur est eos", "Consequuntur est eos"],
-    likes: 156,
-    comments: 23,
-    collaborators: [
-      {
-        id: 1,
-        name: "Alice Johnson",
-        avatar: "/placeholder.svg?height=32&width=32",
-        role: "Lead Developer",
-      },
-      {
-        id: 2,
-        name: "Bob Smith",
-        avatar: "/placeholder.svg?height=32&width=32",
-        role: "UX Designer",
-      },
-    ],
-    suggestions: [
-      {
-        id: 1,
-        user: "Charlie Brown",
-        content: "Add support for multiple languages",
-        votes: 15,
-        timestamp: "2023-06-15T10:30:00Z",
-      },
-      {
-        id: 2,
-        user: "Diana Prince",
-        content: "Implement a plugin system",
-        votes: 12,
-        timestamp: "2023-06-16T14:45:00Z",
-      },
-      {
-        id: 3,
-        user: "Ethan Hunt",
-        content: "Create a dark mode theme",
-        votes: 8,
-        timestamp: "2023-06-17T09:15:00Z",
-      },
-      {
-        id: 4,
-        user: "Charlie Brown",
-        content: "Add support for multiple languages",
-        votes: 15,
-        timestamp: "2023-06-15T10:30:00Z",
-      },
-      {
-        id: 5,
-        user: "Diana Prince",
-        content: "Implement a plugin system",
-        votes: 12,
-        timestamp: "2023-06-16T14:45:00Z",
-      },
-      {
-        id: 6,
-        user: "Ethan Hunt",
-        content: "Create a dark mode theme",
-        votes: 8,
-        timestamp: "2023-06-17T09:15:00Z",
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "AI-powered Task Manager",
-    description:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
-    features: [
-      "Syntax highlighting for multiple programming languages",
-      "Code auto-completion and suggestions",
-      "Integrated terminal",
-      "Git integration",
-      "Customizable themes and extensions",
-    ],
-    tags: ["AI", "Mobile", "Productivity"],
-    likes: 89,
-    comments: 12,
-    collaborators: [
-      {
-        id: 3,
-        name: "Eve Williams",
-        avatar: "/placeholder.svg?height=32&width=32",
-        role: "AI Specialist",
-      },
-    ],
-    suggestions: [
-      {
-        id: 4,
-        user: "Frank Castle",
-        content: "Integrate with popular calendar apps",
-        votes: 8,
-        timestamp: "2023-06-18T11:20:00Z",
-      },
-      {
-        id: 5,
-        user: "Grace Hopper",
-        content: "Add voice command feature",
-        votes: 6,
-        timestamp: "2023-06-19T16:30:00Z",
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: "Decentralized Social Media Platform",
-    description:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in inciduntLorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
-    features: [
-      "Syntax highlighting for multiple programming languages",
-      "Code auto-completion and suggestions",
-      "Integrated terminal",
-      "Git integration",
-      "Customizable themes and extensions",
-    ],
-    tags: ["Web", "Blockchain", "Social"],
-    likes: 201,
-    comments: 34,
-    collaborators: [
-      {
-        id: 4,
-        name: "Grace Lee",
-        avatar: "/placeholder.svg?height=32&width=32",
-        role: "Blockchain Developer",
-      },
-      {
-        id: 5,
-        name: "Henry Ford",
-        avatar: "/placeholder.svg?height=32&width=32",
-        role: "Security Expert",
-      },
-    ],
-    suggestions: [
-      {
-        id: 6,
-        user: "Iris West",
-        content: "Implement end-to-end encryption for messages",
-        votes: 25,
-        timestamp: "2023-06-20T13:10:00Z",
-      },
-      {
-        id: 7,
-        user: "Jack Sparrow",
-        content: "Add a decentralized file sharing feature",
-        votes: 18,
-        timestamp: "2023-06-21T10:05:00Z",
-      },
-      {
-        id: 8,
-        user: "Kate Bishop",
-        content: "Create a user-friendly wallet system",
-        votes: 14,
-        timestamp: "2023-06-22T15:40:00Z",
-      },
-    ],
-  },
-  {
-    id: 4,
-    title:
-      "Open Source Code Editor Open Source Code Editor Open Source Code Editor",
-    description:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis, facere. Debitis hic aspernatur mollitia laboriosam optio qui quam voluptates quas tempora. Dolore neque in incidunt",
-    features: ["Consequuntur est eos", "Consequuntur est eos"],
-    tags: ["Desktop", "Developer Tools"],
-    likes: 156,
-    comments: 23,
-    collaborators: [
-      {
-        id: 1,
-        name: "Alice Johnson",
-        avatar: "/placeholder.svg?height=32&width=32",
-        role: "Lead Developer",
-      },
-      {
-        id: 2,
-        name: "Bob Smith",
-        avatar: "/placeholder.svg?height=32&width=32",
-        role: "UX Designer",
-      },
-    ],
-    suggestions: [
-      {
-        id: 1,
-        user: "Charlie Brown",
-        content: "Add support for multiple languages",
-        votes: 15,
-        timestamp: "2023-06-15T10:30:00Z",
-      },
-      {
-        id: 2,
-        user: "Diana Prince",
-        content: "Implement a plugin system",
-        votes: 12,
-        timestamp: "2023-06-16T14:45:00Z",
-      },
-      {
-        id: 3,
-        user: "Ethan Hunt",
-        content: "Create a dark mode theme",
-        votes: 8,
-        timestamp: "2023-06-17T09:15:00Z",
-      },
-    ],
-  },
-];
-
-const projectTypes = [
-  "Library",
-  "Framework",
-  "Application",
-  "Tool",
-  "Plugin",
-  "Other",
-];
-const tagOptions = [
+const Tags = [
   "Web",
   "Mobile",
   "Desktop",
@@ -261,7 +36,7 @@ const tagOptions = [
 
 export default function Home() {
   const { data, status } = useSession();
-  const [ideas, setIdeas] = useState(mockIdeas);
+  const [ideas, setIdeas] = useState();
   const [selectedType, setSelectedType] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -282,7 +57,27 @@ export default function Home() {
     setIsFilterOpen(false);
   };
 
+  const fetchIdeas = async () => {
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+    try {
+      const response = await axios.get(`${BACKEND_URL}/ideas`, {
+        headers: {
+          Authorization: `Bearer ${data?.accessToken}`,
+        },
+      });
+      setIdeas(response.data.ideas);
+    } catch (error) {
+      console.log("Error while fetching ideas: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchIdeas();
+  }, []);
+
   if (status == "loading") return <div>loading</div>;
+  // console.log(ideas);
 
   return (
     <div className={`flex flex-col min-h-screen bg-black text-white relative`}>
@@ -311,31 +106,11 @@ export default function Home() {
                 <ScrollArea className="h-[calc(100vh-200px)] mt-6 pr-4">
                   <div className="space-y-6">
                     <div>
-                      <Label
-                        htmlFor="projectType"
-                        className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                      >
-                        Project Type
-                      </Label>
-                      <Select onValueChange={(value) => setSelectedType(value)}>
-                        <SelectTrigger id="projectType" className="mt-1">
-                          <SelectValue placeholder="Select project type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {projectTypes.map((type) => (
-                            <SelectItem key={type} value={type}>
-                              {type}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
                       <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Tags
                       </Label>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        {tagOptions.map((tag) => (
+                        {Tags.map((tag) => (
                           <Badge
                             key={tag}
                             variant={
@@ -367,7 +142,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-16 items-center justify-items-center">
-            {ideas.map((idea, idx) => (
+            {ideas?.map((idea, idx) => (
               <IdeaCard idea={idea} key={idx} />
             ))}
           </div>

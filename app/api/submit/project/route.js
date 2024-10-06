@@ -7,7 +7,7 @@ export async function POST(request) {
   const token = await getToken({ req: request });
 
   if (!token) {
-    return Response.json({ message: "Unauthorized" }, { status: 403 });
+    return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
 
   const { name, title, domain, description, guidelines, url, techStack, tags } =

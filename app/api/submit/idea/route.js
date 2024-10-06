@@ -5,10 +5,10 @@ const prisma = new PrismaClient();
 
 export async function POST(request) {
   const token = await getToken({ req: request });
-  console.log(token);
+  // console.log(token);
 
   if (!token) {
-    return Response.json({ message: "Unauthorized" }, { status: 403 });
+    return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
 
   const { title, domain, description, features, tags } = await request.json();

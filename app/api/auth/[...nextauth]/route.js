@@ -33,12 +33,22 @@ export const authOptions = {
 
       const dbUser = await prisma.user.findUnique({
         where: { email: token.email },
+        include: {
+          upvotedIdeas: true,
+          interestedIdeas: true,
+          projects: true,
+          ideas: true,
+        },
       });
 
       if (dbUser) {
         token.id = dbUser.id;
         token.username = dbUser.username;
         token.bio = dbUser.bio;
+        token.upvotedIdeas = dbUser.upvotedIdeas;
+        token.interestedIdeas = dbUser.interestedIdeas;
+        token.projects = dbUser.projects;
+        token.ideas = dbUser.ideas;
       }
       return token;
     },
@@ -51,6 +61,10 @@ export const authOptions = {
         session.user.id = token.id;
         session.user.bio = token.bio;
         session.user.username = token.username;
+        session.user.upvotedIdeas = token.upvotedIdeas;
+        session.user.interestedIdeas = token.interestedIdeas;
+        session.user.projects = token.projects;
+        session.user.ideas = token.ideas;
       }
       return session;
     },

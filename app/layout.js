@@ -10,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Idea Hub",
+  title: "Idea Smthing",
   description: "Share Ideas, Build Projects, Collaborate",
 };
 

@@ -40,12 +40,13 @@ export const ProfileDropdown = () => {
 
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <LogOut className="mr-2 h-4 w-4" />
           <span
             onClick={() => {
               signOut();
             }}
+            className="flex items-center"
           >
+            <LogOut className="mr-2 h-4 w-4" />
             Log out
           </span>
         </DropdownMenuItem>

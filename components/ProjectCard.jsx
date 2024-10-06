@@ -32,17 +32,17 @@ const ProjectCard = ({ project }) => {
           <div>
             Submitted by -{" "}
             <Link href={`/u/`} className="hover:underline">
-              {project.submittedBy}
+              {project.user.name}
             </Link>
           </div>
           <div className="flex items-center justify-between gap-1">
             <div className="flex flex-wrap gap-2 h-6 overflow-hidden w-full">
-              {project.tags.slice(0, 3).map((tag, idx) => (
+              {project.tags.slice(0, 3).map((obj) => (
                 <Badge
-                  key={idx}
+                  key={obj.id}
                   className="bg-bgGray2 hover:bg-bgGray2 text-textGray"
                 >
-                  {tag}
+                  {obj.tag}
                 </Badge>
               ))}
             </div>
@@ -74,7 +74,7 @@ const ProjectCard = ({ project }) => {
               <h3 className="text-lg sm:text-xl font-semibold mb-2 text-white">
                 Contributor Guidelines:
               </h3>
-              <p className="text-textGray">{project.contributorGuidelines}</p>
+              <p className="text-textGray">{project.guidelines}</p>
             </div>
 
             <div className="space-y-4">
@@ -82,12 +82,12 @@ const ProjectCard = ({ project }) => {
                 <span className="font-medium text-white text-sm sm:text-base">
                   Tech Stack:{" "}
                 </span>
-                {project.techStack.map((technology) => (
+                {project.technologies.map((obj) => (
                   <Badge
-                    key={technology}
+                    key={obj.id}
                     className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2 text-xs sm:text-sm"
                   >
-                    {technology}
+                    {obj.technology}
                   </Badge>
                 ))}
               </div>
@@ -96,12 +96,12 @@ const ProjectCard = ({ project }) => {
                 <span className="font-medium text-white text-sm sm:text-base">
                   Tags:{" "}
                 </span>
-                {project.tags.map((tag) => (
+                {project.tags.map((obj) => (
                   <Badge
-                    key={tag}
+                    key={obj.id}
                     className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2 text-xs sm:text-sm"
                   >
-                    {tag}
+                    {obj.tag}
                   </Badge>
                 ))}
               </div>
@@ -110,7 +110,7 @@ const ProjectCard = ({ project }) => {
             <div className="text-white text-sm sm:text-base">
               Submitted by -{" "}
               <Link href={`/u/`} className="hover:underline">
-                {project.submittedBy}
+                {project.user.name}
               </Link>
             </div>
 
@@ -120,7 +120,11 @@ const ProjectCard = ({ project }) => {
                 className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
                 asChild
               >
-                <a target="_blank" rel="noopener noreferrer">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${project.repositoryURL}`}
+                >
                   <Github className="mr-2 h-4 w-4" />
                   View Repository
                 </a>
