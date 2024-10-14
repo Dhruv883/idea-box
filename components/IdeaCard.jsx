@@ -59,11 +59,17 @@ const IdeaCard = ({ idea }) => {
   };
 
   const toggleUpvoteIdea = async () => {
-    const newUpvoteCount = ideaState.isUpvoted ? ideaState.upvoteCount - 1 : ideaState.upvoteCount + 1;
-    setIdeaState((prev) => ({ ...prev, isUpvoted: !prev.isUpvoted, upvoteCount: newUpvoteCount }));
+    const newUpvoteCount = ideaState.isUpvoted
+      ? ideaState.upvoteCount - 1
+      : ideaState.upvoteCount + 1;
+    setIdeaState((prev) => ({
+      ...prev,
+      isUpvoted: !prev.isUpvoted,
+      upvoteCount: newUpvoteCount,
+    }));
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const endpoint = ideaState.isUpvoted ? 'removeUpvote' : 'upvote';
+    const endpoint = ideaState.isUpvoted ? "removeUpvote" : "upvote";
 
     try {
       const response = await axios.post(
@@ -83,7 +89,11 @@ const IdeaCard = ({ idea }) => {
     } catch (error) {
       console.error("Error updating upvote:", error);
       // Revert the update in case of an error
-      setIdeaState((prev) => ({ ...prev, isUpvoted: !prev.isUpvoted, upvoteCount: ideaState.upvoteCount }));
+      setIdeaState((prev) => ({
+        ...prev,
+        isUpvoted: !prev.isUpvoted,
+        upvoteCount: ideaState.upvoteCount,
+      }));
     }
   };
 
@@ -150,7 +160,7 @@ const IdeaCard = ({ idea }) => {
           <h3 className="text-2xl font-semibold max-h-16 text-ellipsis overflow-hidden">
             {idea.title}
           </h3>
-          
+
           <p className="max-h-12 text-ellipsis overflow-hidden text-textGray">
             {idea.description}.
           </p>
@@ -166,7 +176,7 @@ const IdeaCard = ({ idea }) => {
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center justify-between w-full">
               <div className="flex gap-2 overflow-hidden">
-                {idea.tags.slice(0,1).map((obj, index) => (
+                {idea.tags.slice(0, 1).map((obj, index) => (
                   <Badge
                     key={obj.id}
                     className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
@@ -175,9 +185,7 @@ const IdeaCard = ({ idea }) => {
                   </Badge>
                 ))}
                 {idea.tags.length > 1 && (
-                  <Badge
-                    className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
-                  >
+                  <Badge className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap">
                     +{idea.tags.length - 1}
                   </Badge>
                 )}
@@ -222,7 +230,12 @@ const IdeaCard = ({ idea }) => {
                   </Button>
                 </motion.div>
 
-                <Button size="sm" onClick={() => setDialogState({ isOpen: true, type: 'details' })}>
+                <Button
+                  size="sm"
+                  onClick={() =>
+                    setDialogState({ isOpen: true, type: "details" })
+                  }
+                >
                   View Details
                 </Button>
               </div>
@@ -231,7 +244,10 @@ const IdeaCard = ({ idea }) => {
         </div>
       </Card>
 
-      <Dialog open={dialogState.isOpen} onOpenChange={() => setDialogState({ isOpen: false, type: null })}>
+      <Dialog
+        open={dialogState.isOpen}
+        onOpenChange={() => setDialogState({ isOpen: false, type: null })}
+      >
         <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none bg-bgGray text-white overflow-y-auto">
           <DialogHeader className="h-auto mb-4 sm:mb-6">
             <DialogTitle className="text-center text-xl sm:text-2xl md:text-4xl mb-2 sm:mb-4 text-white">
@@ -279,7 +295,9 @@ const IdeaCard = ({ idea }) => {
             <div className="flex flex-wrap gap-2 sm:gap-4">
               <Button
                 variant="outline"
-                onClick={() => setDrawerState((prev) => ({ ...prev, suggestion: true }))}
+                onClick={() =>
+                  setDrawerState((prev) => ({ ...prev, suggestion: true }))
+                }
                 className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
               >
                 <MessageSquare className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
@@ -287,7 +305,9 @@ const IdeaCard = ({ idea }) => {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => setDrawerState((prev) => ({ ...prev, viewSuggestions: true }))}
+                onClick={() =>
+                  setDrawerState((prev) => ({ ...prev, viewSuggestions: true }))
+                }
                 className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
               >
                 <MessageSquare className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
@@ -295,7 +315,12 @@ const IdeaCard = ({ idea }) => {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => setDrawerState((prev) => ({ ...prev, viewCollaborators: true }))}
+                onClick={() =>
+                  setDrawerState((prev) => ({
+                    ...prev,
+                    viewCollaborators: true,
+                  }))
+                }
                 className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
               >
                 <Users className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
@@ -307,11 +332,15 @@ const IdeaCard = ({ idea }) => {
                     <Button
                       variant="outline"
                       className={`bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm ${
-                        ideaState.isInterested ? 'opacity-50 cursor-not-allowed' : ''
+                        ideaState.isInterested
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
                       }`}
                       disabled={ideaState.isInterested}
                     >
-                      {ideaState.isInterested ? 'Interested' : 'Interested in Building'}
+                      {ideaState.isInterested
+                        ? "Interested"
+                        : "Interested in Building"}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
@@ -324,8 +353,8 @@ const IdeaCard = ({ idea }) => {
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                      <Button 
-                        type="submit" 
+                      <Button
+                        type="submit"
                         onClick={handleInterestedInIdea}
                         disabled={ideaState.isInterested}
                       >
@@ -383,7 +412,9 @@ const IdeaCard = ({ idea }) => {
       {/*  SUGGEST FEATURES DRAWER */}
       <Drawer
         open={drawerState.suggestion}
-        onOpenChange={() => setDrawerState((prev) => ({ ...prev, suggestion: false }))}
+        onOpenChange={() =>
+          setDrawerState((prev) => ({ ...prev, suggestion: false }))
+        }
       >
         <DrawerContent className="bg-bgGray">
           <DrawerHeader>
@@ -415,7 +446,9 @@ const IdeaCard = ({ idea }) => {
       {/*  VIEW SUGGESTIONS DRAWER */}
       <Drawer
         open={drawerState.viewSuggestions}
-        onOpenChange={() => setDrawerState((prev) => ({ ...prev, viewSuggestions: false }))}
+        onOpenChange={() =>
+          setDrawerState((prev) => ({ ...prev, viewSuggestions: false }))
+        }
       >
         <DrawerContent className="bg-bgGray">
           <DrawerHeader>
@@ -442,7 +475,9 @@ const IdeaCard = ({ idea }) => {
       {/*  VIEW INTERESTED PEEPS DRAWER */}
       <Drawer
         open={drawerState.viewCollaborators}
-        onOpenChange={() => setDrawerState((prev) => ({ ...prev, viewCollaborators: false }))}
+        onOpenChange={() =>
+          setDrawerState((prev) => ({ ...prev, viewCollaborators: false }))
+        }
       >
         <DrawerContent className="bg-bgGray">
           <DrawerHeader>

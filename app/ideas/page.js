@@ -1,60 +1,60 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import IdeaCard from "@/components/IdeaCard";
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-// import { Tags } from "@/constants";
-
-const Tags = [
-  "Web",
-  "Mobile",
-  "Desktop",
-  "CLI",
-  "AI",
-  "Data Science",
-  "DevOps",
-  "Security",
-  "Blockchain",
-  "Social",
-];
+import IdeaFilter from "@/components/IdeaFilter";
+import { Tags } from "@/constants";
 
 export default function Home() {
   const { data, status } = useSession();
   const [ideas, setIdeas] = useState();
-  const [selectedType, setSelectedType] = useState(null);
+  const [filteredIdeas, setFilteredIdeas] = useState();
   const [selectedTags, setSelectedTags] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [customTag, setCustomTag] = useState("");
+  const [filteredTags, setFilteredTags] = useState(Tags);
 
   const filterIdeas = () => {
-    return mockIdeas.filter((idea) => {
-      const matchesType = !selectedType || idea.projectType === selectedType;
-      const matchesTags =
-        selectedTags.length === 0 ||
-        selectedTags.some((tag) => idea.tags.includes(tag));
+    if (selectedTags.length == 0) return ideas;
 
-      return matchesType && matchesTags;
+    return ideas.filter((idea) => {
+      const matchesTags = selectedTags.some((tag) =>
+        idea.tags.some((tagObject) => tagObject.tag === tag)
+      );
+      return matchesTags;
     });
   };
 
+  const resetFilters = () => {
+    setSelectedTags([]);
+    setFilteredIdeas(ideas);
+  };
+
   const applyFilters = () => {
-    setIdeas(filterIdeas());
+    setFilteredIdeas(filterIdeas());
     setIsFilterOpen(false);
+  };
+
+  const handleTagClick = (tag) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const handleRemoveTag = (tag) => {
+    setSelectedTags((prev) => prev.filter((t) => t !== tag));
+  };
+
+  const handleAddCustomTag = () => {
+    if (customTag && !selectedTags.includes(customTag)) {
+      setSelectedTags((prev) => [...prev, customTag]);
+      setCustomTag("");
+    }
   };
 
   const fetchIdeas = async () => {
@@ -67,14 +67,25 @@ export default function Home() {
         },
       });
       setIdeas(response.data.ideas);
+      setFilteredIdeas(response.data.ideas);
     } catch (error) {
       console.log("Error while fetching ideas: ", error);
     }
   };
 
   useEffect(() => {
-    fetchIdeas();
-  }, []);
+    if (data?.accessToken) {
+      fetchIdeas();
+    }
+  }, [data?.accessToken]);
+
+  useEffect(() => {
+    const lowercasedTerm = searchTerm.toLowerCase();
+    const filtered = Tags.filter((tag) =>
+      tag.toLowerCase().includes(lowercasedTerm)
+    );
+    setFilteredTags(filtered);
+  }, [searchTerm]);
 
   if (status == "loading") return <div>loading</div>;
   // console.log(ideas);
@@ -89,60 +100,26 @@ export default function Home() {
           </h1>
 
           <div className="flex justify-end mb-4">
-            <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline">
-                  <Filter className="mr-2" size={20} />
-                  Filters
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Filter Ideas</SheetTitle>
-                  <SheetDescription>
-                    Apply filters to narrow down project ideas
-                  </SheetDescription>
-                </SheetHeader>
-                <ScrollArea className="h-[calc(100vh-200px)] mt-6 pr-4">
-                  <div className="space-y-6">
-                    <div>
-                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Tags
-                      </Label>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {Tags.map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant={
-                              selectedTags.includes(tag) ? "default" : "outline"
-                            }
-                            className="cursor-pointer transition-all duration-200 ease-in-out hover:scale-105"
-                            onClick={() => {
-                              setSelectedTags((prev) =>
-                                prev.includes(tag)
-                                  ? prev.filter((t) => t !== tag)
-                                  : [...prev, tag]
-                              );
-                            }}
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </ScrollArea>
-                <div className="mt-6">
-                  <Button onClick={applyFilters} className="w-full">
-                    Apply Filters
-                  </Button>
-                </div>
-              </SheetContent>
-            </Sheet>
+            <IdeaFilter
+              isFilterOpen={isFilterOpen}
+              setIsFilterOpen={setIsFilterOpen}
+              applyFilters={applyFilters}
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+              resetFilters={resetFilters}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              customTag={customTag}
+              setCustomTag={setCustomTag}
+              handleAddCustomTag={handleAddCustomTag}
+              handleRemoveTag={handleRemoveTag}
+              filteredTags={filteredTags}
+              handleTagClick={handleTagClick}
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-16 items-center justify-items-center">
-            {ideas?.map((idea, idx) => (
+            {filteredIdeas?.map((idea, idx) => (
               <IdeaCard idea={idea} key={idx} />
             ))}
           </div>
