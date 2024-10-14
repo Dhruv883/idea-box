@@ -24,56 +24,45 @@ export const authOptions = {
   callbacks: {
     async jwt(data) {
       const { token, account, profile } = data;
-      // console.log("JWT :", data);
 
       if (account) {
         token.accessToken = account.access_token;
         token.id_token = account.id_token;
+        token.email = profile.email;
       }
 
-      const dbUser = await prisma.user.findUnique({
-        where: { email: token.email },
-        include: {
-          upvotedIdeas: true,
-          upvotedProjects: true,
-          interestedIdeas: true,
-          projects: true,
-          ideas: true,
-        },
-      });
-
-      if (dbUser) {
-        token.id = dbUser.id;
-        token.username = dbUser.username;
-        token.bio = dbUser.bio;
-        token.upvotedIdeas = dbUser.upvotedIdeas;
-        token.interestedIdeas = dbUser.interestedIdeas;
-        token.projects = dbUser.projects;
-        token.ideas = dbUser.ideas;
-        token.upvotedProjects = dbUser.upvotedProjects;
-      }
       return token;
     },
 
     async session(data) {
-      // console.log("Session: ", data);
       const { session, token } = data;
       if (token) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email },
+          include: {
+            upvotedIdeas: true,
+            upvotedProjects: true,
+            interestedIdeas: true,
+            projects: true,
+            ideas: true,
+          },
+        });
+
         session.accessToken = token.accessToken;
-        session.user.id = token.id;
-        session.user.bio = token.bio;
-        session.user.username = token.username;
-        session.user.upvotedIdeas = token.upvotedIdeas;
-        session.user.interestedIdeas = token.interestedIdeas;
-        session.user.projects = token.projects;
-        session.user.upvotedProjects = token.upvotedProjects;
-        session.user.ideas = token.ideas;
+        session.user.id = dbUser.id;
+        session.user.bio = dbUser.bio;
+        session.user.username = dbUser.username;
+        session.user.upvotedIdeas = dbUser.upvotedIdeas;
+        session.user.interestedIdeas = dbUser.interestedIdeas;
+        session.user.projects = dbUser.projects;
+        session.user.upvotedProjects = dbUser.upvotedProjects;
+        session.user.ideas = dbUser.ideas;
       }
       return session;
     },
 
     async signIn(data) {
-      const { user, account, profile } = data;
+      const { user } = data;
       try {
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email },

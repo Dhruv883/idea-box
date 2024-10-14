@@ -2,57 +2,41 @@
 
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Filter } from "lucide-react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Label } from "@/components/ui/label";
-
-import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/ProjectCard";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-
-const tagOptions = [
-  "Web",
-  "Mobile",
-  "Desktop",
-  "CLI",
-  "AI",
-  "Data Science",
-  "DevOps",
-  "Security",
-  "Blockchain",
-  "Social",
-];
+import { Tags } from "@/constants";
+import Filter from "@/components/Filter";
 
 export default function Home() {
   const { data, status } = useSession();
   const [projects, setProjects] = useState();
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filteredProjects, setFilteredProjects] = useState();
   const [selectedTags, setSelectedTags] = useState([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [customTag, setCustomTag] = useState("");
+  const [filteredTags, setFilteredTags] = useState(Tags);
 
-  const filterIdeas = () => {
-    return mockIdeas.filter((idea) => {
-      const matchesType = !selectedType || idea.projectType === selectedType;
-      const matchesTags =
-        selectedTags.length === 0 ||
-        selectedTags.some((tag) => idea.tags.includes(tag));
+  const filterProjects = () => {
+    if (selectedTags.length == 0) return projects;
 
-      return matchesType && matchesTags;
+    return projects.filter((project) => {
+      const matchesTags = selectedTags.some((tag) =>
+        project.tags.some((tagObject) => tagObject.tag === tag)
+      );
+      return matchesTags;
     });
   };
 
   const applyFilters = () => {
-    setIdeas(filterIdeas());
+    setFilteredProjects(filterProjects());
     setIsFilterOpen(false);
+  };
+
+  const resetFilters = () => {
+    setFilteredProjects(projects);
+    setSelectedTags([]);
   };
 
   const fetchProjects = async () => {
@@ -64,16 +48,44 @@ export default function Home() {
           Authorization: `Bearer ${data?.accessToken}`,
         },
       });
-      
+
       setProjects(response.data.projects);
+      setFilteredProjects(response.data.projects);
     } catch (error) {
       console.log("Error while fetching projects: ", error);
     }
   };
 
+  const handleTagClick = (tag) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const handleRemoveTag = (tag) => {
+    setSelectedTags((prev) => prev.filter((t) => t !== tag));
+  };
+
+  const handleAddCustomTag = () => {
+    if (customTag && !selectedTags.includes(customTag)) {
+      setSelectedTags((prev) => [...prev, customTag]);
+      setCustomTag("");
+    }
+  };
+
   useEffect(() => {
-    fetchProjects();
-  }, []);
+    if (data?.accessToken) {
+      fetchProjects();
+    }
+  }, [data?.accessToken]);
+
+  useEffect(() => {
+    const lowercasedTerm = searchTerm.toLowerCase();
+    const filtered = Tags.filter((tag) =>
+      tag.toLowerCase().includes(lowercasedTerm)
+    );
+    setFilteredTags(filtered);
+  }, [searchTerm]);
 
   if (status == "loading") return <div>loading</div>;
 
@@ -87,60 +99,27 @@ export default function Home() {
           </h1>
 
           <div className="flex justify-end mb-4">
-            <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline">
-                  <Filter className="mr-2" size={20} />
-                  Filters
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Filter Ideas</SheetTitle>
-                  <SheetDescription>
-                    Apply filters to narrow down project ideas
-                  </SheetDescription>
-                </SheetHeader>
-                <ScrollArea className="h-[calc(100vh-200px)] mt-6 pr-4">
-                  <div className="space-y-6">
-                    <div>
-                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Tags
-                      </Label>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {tagOptions.map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant={
-                              selectedTags.includes(tag) ? "default" : "outline"
-                            }
-                            className="cursor-pointer transition-all duration-200 ease-in-out hover:scale-105"
-                            onClick={() => {
-                              setSelectedTags((prev) =>
-                                prev.includes(tag)
-                                  ? prev.filter((t) => t !== tag)
-                                  : [...prev, tag]
-                              );
-                            }}
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </ScrollArea>
-                <div className="mt-6">
-                  <Button onClick={applyFilters} className="w-full">
-                    Apply Filters
-                  </Button>
-                </div>
-              </SheetContent>
-            </Sheet>
+            <Filter
+              isFilterOpen={isFilterOpen}
+              setIsFilterOpen={setIsFilterOpen}
+              applyFilters={applyFilters}
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+              resetFilters={resetFilters}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              customTag={customTag}
+              setCustomTag={setCustomTag}
+              handleAddCustomTag={handleAddCustomTag}
+              handleRemoveTag={handleRemoveTag}
+              filteredTags={filteredTags}
+              handleTagClick={handleTagClick}
+              filterType={"Projects"}
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-16 items-center justify-items-center">
-            {projects?.map((project, idx) => (
+            {filteredProjects?.map((project, idx) => (
               <ProjectCard project={project} key={idx} />
             ))}
           </div>

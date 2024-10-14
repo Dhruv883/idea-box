@@ -1,9 +1,12 @@
+"use client";
 import Navbar from "@/components/Navbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Lightbulb, Globe } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function Home() {
+  const { data, status } = useSession();
   const menu = [
     {
       title: "Share your project idea",
@@ -21,6 +24,8 @@ export default function Home() {
       link: "project",
     },
   ];
+
+  if (status == "loading") return <div>Loading...</div>;
 
   return (
     <div className={`flex flex-col min-h-screen relative`}>

@@ -29,16 +29,20 @@ const ProjectCard = ({ project }) => {
     isUpvoted: false,
   });
 
-  
   const toggleUpvoteProject = async () => {
-
     const newIsUpvoted = !projectState.isUpvoted;
-    const newUpvoteCount = newIsUpvoted ? projectState.upvoteCount + 1 : projectState.upvoteCount - 1;
+    const newUpvoteCount = newIsUpvoted
+      ? projectState.upvoteCount + 1
+      : projectState.upvoteCount - 1;
 
-    setProjectState((prev) => ({ ...prev, isUpvoted: newIsUpvoted, upvoteCount: newUpvoteCount }));
+    setProjectState((prev) => ({
+      ...prev,
+      isUpvoted: newIsUpvoted,
+      upvoteCount: newUpvoteCount,
+    }));
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const endpoint = newIsUpvoted ? 'upvote' : 'removeUpvote';
+    const endpoint = newIsUpvoted ? "upvote" : "removeUpvote";
 
     try {
       const response = await axios.post(
@@ -52,13 +56,16 @@ const ProjectCard = ({ project }) => {
       );
 
       const updatedProject = response.data;
-      setProjectState((prev) => ({ ...prev, upvoteCount: updatedProject.upvotes }));
+      setProjectState((prev) => ({
+        ...prev,
+        upvoteCount: updatedProject.upvotes,
+      }));
     } catch (error) {
       console.error("Error updating upvote:", error);
-      setProjectState((prev) => ({ 
-        ...prev, 
-        isUpvoted: !newIsUpvoted, 
-        upvoteCount: newIsUpvoted ? newUpvoteCount - 1 : newUpvoteCount + 1 
+      setProjectState((prev) => ({
+        ...prev,
+        isUpvoted: !newIsUpvoted,
+        upvoteCount: newIsUpvoted ? newUpvoteCount - 1 : newUpvoteCount + 1,
       }));
     }
   };
@@ -98,21 +105,19 @@ const ProjectCard = ({ project }) => {
           </div>
           <div className="flex items-center justify-between gap-1">
             <div className="flex flex-wrap gap-2 h-6 overflow-hidden w-full">
-              {project.tags.slice(0,1).map((obj, index) => (
-                    <Badge
-                      key={obj.id}
-                      className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
-                    >
-                      {obj.tag}
-                    </Badge>
-                  ))}
-                  {project.tags.length > 1 && (
-                    <Badge
-                      className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
-                    >
-                      +{project.tags.length - 1}
-                    </Badge>
-                  )}
+              {project.tags.slice(0, 1).map((obj, index) => (
+                <Badge
+                  key={obj.id}
+                  className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
+                >
+                  {obj.tag}
+                </Badge>
+              ))}
+              {project.tags.length > 1 && (
+                <Badge className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap">
+                  +{project.tags.length - 1}
+                </Badge>
+              )}
             </div>
             <div className="flex items-center gap-4 ">
               <motion.div

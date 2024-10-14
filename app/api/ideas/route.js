@@ -25,18 +25,14 @@ export async function GET(request) {
       },
     });
 
-    console.log("Successfully Fetched Ideas");
-
     return Response.json(
       { message: "Successfully Fetched Ideas", ideas: Ideas },
       { status: 200 }
     );
   } catch (error) {
-    console.log("An Error Occured while fetching ideas");
-
     return Response.json(
       { message: "An Error Occured while fetching ideas" },
-      { status: 500 } 
+      { status: 500 }
     );
   }
 }

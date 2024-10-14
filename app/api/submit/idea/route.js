@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 
 export async function POST(request) {
   const token = await getToken({ req: request });
-  // console.log(token);
 
   if (!token) {
     return Response.json({ message: "Unauthorized" }, { status: 401 });
@@ -21,8 +20,6 @@ export async function POST(request) {
       userId: token.id,
     },
   });
-
-  // console.log("Idea", idea);
 
   features.forEach(async (feat) => {
     await prisma.feature.create({

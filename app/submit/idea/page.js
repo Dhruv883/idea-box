@@ -109,14 +109,11 @@ export default function Home() {
         }
       );
 
-      console.log(response);
-
       toast({
         title: "Success",
         description: "Project idea submitted successfully!",
       });
     } catch (error) {
-      console.log("Error", error);
       toast({
         title: "Error",
         description: "Failed to submit your idea. Please try again.",

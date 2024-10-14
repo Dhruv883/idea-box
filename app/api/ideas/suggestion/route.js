@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function POST(request) {
-
   const token = await getToken({ req: request });
 
   if (!token) {
@@ -14,7 +13,6 @@ export async function POST(request) {
   const { suggestion, ideaId } = await request.json();
 
   try {
-
     const user = await prisma.user.findUnique({
       where: { email: token.email },
       include: { upvotedIdeas: true },
@@ -47,8 +45,6 @@ export async function POST(request) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("Error: ", error);
-
     return Response.json(
       { message: "Error while adding suggestion" },
       { status: 400 }

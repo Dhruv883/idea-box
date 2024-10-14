@@ -92,14 +92,11 @@ export default function Home() {
         }
       );
 
-      console.log(response);
-
       toast({
         title: "Success",
         description: "Project submitted successfully!",
       });
     } catch (error) {
-      console.log("Error", error);
       toast({
         title: "Error",
         description: "Failed to submit your Project. Please try again.",
@@ -176,8 +173,8 @@ export default function Home() {
                   type="url"
                   id="url"
                   className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  placeholder="https://github.com/username/project"
-                  pattern="https://github.com.*"
+                  placeholder="https://github.com/username/project-name"
+                  pattern="https:\/\/github\.com\/[^\/]+\/[^\/]+"
                   required
                 />
               </div>

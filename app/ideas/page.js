@@ -6,8 +6,9 @@ import IdeaCard from "@/components/IdeaCard";
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import IdeaFilter from "@/components/IdeaFilter";
+import Filter from "@/components/Filter";
 import { Tags } from "@/constants";
+import PreLoader from "@/components/PreLoader";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -87,8 +88,7 @@ export default function Home() {
     setFilteredTags(filtered);
   }, [searchTerm]);
 
-  if (status == "loading") return <div>loading</div>;
-  // console.log(ideas);
+  if (status == "loading") return <div>Loading...</div>;
 
   return (
     <div className={`flex flex-col min-h-screen bg-black text-white relative`}>
@@ -100,7 +100,7 @@ export default function Home() {
           </h1>
 
           <div className="flex justify-end mb-4">
-            <IdeaFilter
+            <Filter
               isFilterOpen={isFilterOpen}
               setIsFilterOpen={setIsFilterOpen}
               applyFilters={applyFilters}
@@ -115,6 +115,7 @@ export default function Home() {
               handleRemoveTag={handleRemoveTag}
               filteredTags={filteredTags}
               handleTagClick={handleTagClick}
+              filterType={"Ideas"}
             />
           </div>
 
