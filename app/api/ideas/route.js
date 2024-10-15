@@ -11,7 +11,12 @@ export async function GET(request) {
   }
 
   try {
+    const offset = parseInt(request.nextUrl.searchParams.get("offset"));
+    const limit = parseInt(request.nextUrl.searchParams.get("limit"));
+
     const Ideas = await prisma.idea.findMany({
+      skip: offset,
+      take: limit,
       include: {
         tags: true,
         features: true,
@@ -25,8 +30,14 @@ export async function GET(request) {
       },
     });
 
+    const ideaCount = await prisma.idea.count();
+
     return Response.json(
-      { message: "Successfully Fetched Ideas", ideas: Ideas },
+      {
+        message: "Successfully Fetched Ideas",
+        ideas: Ideas,
+        totalIdeas: ideaCount,
+      },
       { status: 200 }
     );
   } catch (error) {

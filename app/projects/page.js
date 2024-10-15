@@ -5,8 +5,9 @@ import { useState, useEffect } from "react";
 import ProjectCard from "@/components/ProjectCard";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import { Tags } from "@/constants";
-import Filter from "@/components/Filter";
+import { Tags, TechStackTags } from "@/constants";
+import ProjectFilter from "@/components/ProjectFilter";
+import Pagination from "@/components/Pagination";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -17,6 +18,19 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [customTag, setCustomTag] = useState("");
   const [filteredTags, setFilteredTags] = useState(Tags);
+  const [filteredTechStack, setFilteredTechStack] = useState(TechStackTags);
+  const [selectedTechStack, setSelectedTechStack] = useState([]);
+
+  const [totalProjects, setTotalProjects] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit, setLimit] = useState(9);
+  const [offset, setOffset] = useState(0);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setOffset((page - 1) * limit);
+  };
 
   const filterProjects = () => {
     if (selectedTags.length == 0) return projects;
@@ -25,9 +39,14 @@ export default function Home() {
       const matchesTags = selectedTags.some((tag) =>
         project.tags.some((tagObject) => tagObject.tag === tag)
       );
-      return matchesTags;
+      const matchesTechStack = selectedTechStack.some((tag) =>
+        project.technologies.some((tagObject) => tagObject.technology === tag)
+      );
+
+      return matchesTags || matchesTechStack;
     });
   };
+  console.log(projects);
 
   const applyFilters = () => {
     setFilteredProjects(filterProjects());
@@ -37,29 +56,40 @@ export default function Home() {
   const resetFilters = () => {
     setFilteredProjects(projects);
     setSelectedTags([]);
+    setSelectedTechStack([]);
+    setSearchTerm("");
+    setCustomTag("");
   };
 
   const fetchProjects = async () => {
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     try {
-      const response = await axios.get(`${BACKEND_URL}/projects`, {
-        headers: {
-          Authorization: `Bearer ${data?.accessToken}`,
-        },
-      });
+      const response = await axios.get(
+        `${BACKEND_URL}/projects?offset=${0}&limit=${9}`,
+        {
+          headers: {
+            Authorization: `Bearer ${data?.accessToken}`,
+          },
+        }
+      );
 
       setProjects(response.data.projects);
+      setTotalProjects(response.data.totalProjects);
       setFilteredProjects(response.data.projects);
     } catch (error) {
       console.log("Error while fetching projects: ", error);
     }
   };
 
-  const handleTagClick = (tag) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-    );
+  const handleTagClick = (tag, isTag) => {
+    const currentSelection = isTag ? selectedTags : selectedTechStack;
+    const setSelection = isTag ? setSelectedTags : setSelectedTechStack;
+    if (currentSelection.includes(tag)) {
+      setSelection(currentSelection.filter((t) => t !== tag));
+    } else {
+      setSelection([...currentSelection, tag]);
+    }
   };
 
   const handleRemoveTag = (tag) => {
@@ -87,6 +117,11 @@ export default function Home() {
     setFilteredTags(filtered);
   }, [searchTerm]);
 
+  useEffect(() => {
+    const total = Math.ceil(totalProjects / 9);
+    setTotalPages(total);
+  }, [totalProjects]);
+
   if (status == "loading") return <div>loading</div>;
 
   return (
@@ -99,12 +134,11 @@ export default function Home() {
           </h1>
 
           <div className="flex justify-end mb-4">
-            <Filter
+            <ProjectFilter
               isFilterOpen={isFilterOpen}
               setIsFilterOpen={setIsFilterOpen}
               applyFilters={applyFilters}
               selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
               resetFilters={resetFilters}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
@@ -114,15 +148,22 @@ export default function Home() {
               handleRemoveTag={handleRemoveTag}
               filteredTags={filteredTags}
               handleTagClick={handleTagClick}
-              filterType={"Projects"}
+              selectedTechStack={selectedTechStack}
+              filteredTechStack={filteredTechStack}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-16 items-center justify-items-center">
-            {filteredProjects?.map((project, idx) => (
-              <ProjectCard project={project} key={idx} />
+            {filteredProjects?.map((project) => (
+              <ProjectCard project={project} key={project.id} />
             ))}
           </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </main>
     </div>

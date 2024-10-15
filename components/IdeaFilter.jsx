@@ -11,7 +11,7 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 
-export default function F({
+export default function IdeaFilter({
   isFilterOpen,
   setIsFilterOpen,
   applyFilters,

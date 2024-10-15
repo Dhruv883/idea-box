@@ -6,9 +6,10 @@ import IdeaCard from "@/components/IdeaCard";
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import Filter from "@/components/Filter";
+import IdeaFilter from "@/components/IdeaFilter";
 import { Tags } from "@/constants";
 import PreLoader from "@/components/PreLoader";
+import Pagination from "@/components/Pagination";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -19,6 +20,17 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [customTag, setCustomTag] = useState("");
   const [filteredTags, setFilteredTags] = useState(Tags);
+
+  const [totalIdeas, setTotalIdeas] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit, setLimit] = useState(9);
+  const [offset, setOffset] = useState(0);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setOffset((page - 1) * limit);
+  };
 
   const filterIdeas = () => {
     if (selectedTags.length == 0) return ideas;
@@ -62,12 +74,16 @@ export default function Home() {
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     try {
-      const response = await axios.get(`${BACKEND_URL}/ideas`, {
-        headers: {
-          Authorization: `Bearer ${data?.accessToken}`,
-        },
-      });
+      const response = await axios.get(
+        `${BACKEND_URL}/ideas?offset=${offset}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${data?.accessToken}`,
+          },
+        }
+      );
       setIdeas(response.data.ideas);
+      setTotalIdeas(response.data.totalIdeas);
       setFilteredIdeas(response.data.ideas);
     } catch (error) {
       console.log("Error while fetching ideas: ", error);
@@ -78,7 +94,7 @@ export default function Home() {
     if (data?.accessToken) {
       fetchIdeas();
     }
-  }, [data?.accessToken]);
+  }, [data?.accessToken, currentPage]);
 
   useEffect(() => {
     const lowercasedTerm = searchTerm.toLowerCase();
@@ -87,6 +103,11 @@ export default function Home() {
     );
     setFilteredTags(filtered);
   }, [searchTerm]);
+
+  useEffect(() => {
+    const total = Math.ceil(totalIdeas / 9);
+    setTotalPages(total);
+  }, [totalIdeas]);
 
   if (status == "loading") return <div>Loading...</div>;
 
@@ -98,9 +119,8 @@ export default function Home() {
           <h1 className="text-4xl mb-4 font-bold text-center">
             Explore Project Ideas
           </h1>
-
           <div className="flex justify-end mb-4">
-            <Filter
+            <IdeaFilter
               isFilterOpen={isFilterOpen}
               setIsFilterOpen={setIsFilterOpen}
               applyFilters={applyFilters}
@@ -118,12 +138,16 @@ export default function Home() {
               filterType={"Ideas"}
             />
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-16 items-center justify-items-center">
-            {filteredIdeas?.map((idea, idx) => (
-              <IdeaCard idea={idea} key={idx} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-16 items-center justify-items-center">
+            {filteredIdeas?.map((idea) => (
+              <IdeaCard idea={idea} key={idea.id} />
             ))}
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </main>
     </div>

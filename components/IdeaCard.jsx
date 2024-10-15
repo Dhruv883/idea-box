@@ -34,7 +34,9 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import axios from "axios";
 
-const IdeaCard = ({ idea }) => {
+const IdeaCard = ({ idea, onUpvoteChange }) => {
+  console.log(idea);
+
   const { data, status } = useSession();
 
   const [dialogState, setDialogState] = useState({ isOpen: false, type: null });
@@ -175,7 +177,7 @@ const IdeaCard = ({ idea }) => {
 
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center justify-between w-full">
-              <div className="flex gap-2 overflow-hidden">
+              <div className="flex gap-2 overflow-clip w-44">
                 {idea.tags.slice(0, 1).map((obj, index) => (
                   <Badge
                     key={obj.id}
