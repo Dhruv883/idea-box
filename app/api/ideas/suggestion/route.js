@@ -28,7 +28,7 @@ export async function POST(request) {
         suggestions: {
           create: {
             suggestion,
-            userId: token.id,
+            userId: user.id,
           },
         },
       },

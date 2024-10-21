@@ -21,6 +21,9 @@ export const authOptions = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/",
+  },
   callbacks: {
     async jwt(data) {
       const { token, account, profile } = data;
@@ -40,11 +43,24 @@ export const authOptions = {
         const dbUser = await prisma.user.findUnique({
           where: { email: token.email },
           include: {
-            upvotedIdeas: true,
-            upvotedProjects: true,
-            interestedIdeas: true,
+            upvotedIdeas: {
+              include: {
+                user: true,
+              },
+            },
+            upvotedProjects: {
+              include: {
+                user: true,
+              },
+            },
+            interestedIdeas: {
+              include: {
+                user: true,
+              },
+            },
             projects: true,
             ideas: true,
+            profiles: true,
           },
         });
 
@@ -52,6 +68,7 @@ export const authOptions = {
         session.user.id = dbUser.id;
         session.user.bio = dbUser.bio;
         session.user.username = dbUser.username;
+        session.user.profiles = dbUser.profiles;
         session.user.upvotedIdeas = dbUser.upvotedIdeas;
         session.user.interestedIdeas = dbUser.interestedIdeas;
         session.user.projects = dbUser.projects;

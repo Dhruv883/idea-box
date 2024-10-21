@@ -27,7 +27,7 @@ export default function Navbar() {
       </div>
 
       <div
-        className={`flex-col md:flex-row md:flex md:items-center md:gap-x-8 text-xl border-b-2 border-b-black md:border-none absolute md:relative bg-white md:bg-transparent top-16 md:top-auto right-0 md:right-auto w-full md:w-auto p-4 md:p-0 text-white   ${
+        className={`flex-col md:flex-row md:flex md:items-center md:gap-x-8 text-xl border-b-2 border-b-black md:border-none absolute md:relative bg-black md:bg-transparent top-16 md:top-auto right-0 md:right-auto w-full md:w-auto p-4 md:p-0 text-white  ${
           isOpen ? "flex" : "hidden"
         }`}
       >
@@ -44,7 +44,6 @@ export default function Navbar() {
           <ProfileDropdown />
         ) : (
           <Link
-          
             href="/login"
             className="rounded-2xl flex justify-center mt-3 md:mt-0"
           >

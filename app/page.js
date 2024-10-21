@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Users, Zap, Globe, Target } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
@@ -8,6 +6,60 @@ export default function Home() {
   return (
     <div className={`flex flex-col min-h-screen bg-black text-white relative `}>
       <Navbar />
+      {/* <svg
+        className="absolute inset-0 w-full h-full"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <pattern
+            id="circuit"
+            x="0"
+            y="0"
+            width="100"
+            height="100"
+            patternUnits="userSpaceOnUse"
+          >
+            <circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.3)">
+              <animate
+                attributeName="opacity"
+                values="0;1;0"
+                dur="4s"
+                repeatCount="indefinite"
+              />
+            </circle>
+            <circle cx="90" cy="90" r="2" fill="rgba(255,255,255,0.3)">
+              <animate
+                attributeName="opacity"
+                values="0;1;0"
+                dur="4s"
+                begin="2s"
+                repeatCount="indefinite"
+              />
+            </circle>
+            <path
+              d="M10 10 L90 90"
+              stroke="rgba(255,255,255,0.2)"
+              strokeWidth="1"
+            >
+              <animate
+                attributeName="stroke-dasharray"
+                values="0,90;90,0"
+                dur="4s"
+                repeatCount="indefinite"
+              />
+            </path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#circuit)" />
+      </svg> */}
+
+      {/* <div className="absolute inset-0">
+        <div className="absolute top-1/3 left-1/3 w-32 h-32 bg-blue-500/30 rounded-full filter blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-1/3 right-1/3 w-40 h-40 bg-purple-500/30 rounded-full filter blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+      </div> */}
       <main className="flex-1">
         <section className="h-screen w-full flex items-center justify-center">
           <div className="w-3/4">
