@@ -14,7 +14,8 @@ export default function Navbar() {
   return (
     <div className="absolute z-20 w-full flex items-center justify-between p-5">
       <Link href="/">
-        <Image src="/logo-main.png" width={200} height={200} alt="Logo" />
+        {/* <Image src="/logo-main.png" width={200} height={200} alt="Logo" /> */}
+        <div className="text-5xl">ideaBox</div>
       </Link>
 
       <div className="md:hidden">

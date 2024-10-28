@@ -6,10 +6,6 @@ const prisma = new PrismaClient();
 export async function POST(request) {
   const token = await getToken({ req: request });
 
-  if (!token) {
-    return Response.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
   const user = await prisma.user.findUnique({
     where: { email: token.email },
   });
@@ -22,7 +18,6 @@ export async function POST(request) {
     const { type, profileUrl } = await request.json();
     const userId = user.id;
 
-    // Check if the user profile already exists for the given type and userId
     const existingProfile = await prisma.userProfile.findUnique({
       where: {
         userId_type: {
@@ -34,7 +29,6 @@ export async function POST(request) {
 
     let profile;
     if (existingProfile) {
-      // If profile exists, update it
       profile = await prisma.userProfile.update({
         where: {
           userId_type: {
@@ -47,7 +41,6 @@ export async function POST(request) {
         },
       });
     } else {
-      // If profile doesn't exist, create it
       profile = await prisma.userProfile.create({
         data: {
           userId,

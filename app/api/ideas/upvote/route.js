@@ -5,24 +5,21 @@ const prisma = new PrismaClient();
 
 export async function POST(request) {
   const token = await getToken({ req: request });
+  const user = await prisma.user.findUnique({
+    where: { email: token.email },
+    include: { upvotedIdeas: true },
+  });
 
-  if (!token) {
-    return Response.json({ message: "Unauthorized" }, { status: 401 });
+  if (!user) {
+    return Response.json({ message: "User not found" }, { status: 404 });
   }
 
   const { ideaId } = await request.json();
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email: token.email },
-      include: { upvotedIdeas: true },
-    });
-
-    if (!user) {
-      return Response.json({ message: "User not found" }, { status: 404 });
-    }
-
-    const alreadyUpvoted = user.upvotedIdeas.some(idea => idea.id === Number(ideaId));
+    const alreadyUpvoted = user.upvotedIdeas.some(
+      (idea) => idea.id === Number(ideaId)
+    );
 
     if (alreadyUpvoted) {
       return Response.json({ message: "Already upvoted" }, { status: 400 });

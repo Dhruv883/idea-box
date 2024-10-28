@@ -4,6 +4,16 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function GET(request, { params }) {
+  const token = await getToken({ req: request });
+
+  const userReq = await prisma.user.findUnique({
+    where: { email: token.email },
+  });
+
+  if (!userReq) {
+    return Response.json({ message: "User not found" }, { status: 404 });
+  }
+
   const { username } = params;
 
   try {

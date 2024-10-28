@@ -17,8 +17,11 @@ import { Tags } from "@/constants";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import PreLoader from "@/components/PreLoader";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
   const { data, status } = useSession();
   const { toast } = useToast();
   const [features, setFeatures] = useState([]);
@@ -93,7 +96,8 @@ export default function Home() {
       tags,
     };
 
-    return postIdea(formData);
+    postIdea(formData);
+    router.push("/ideas");
   };
 
   const postIdea = async (formData) => {

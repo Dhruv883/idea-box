@@ -8,9 +8,9 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import IdeaFilter from "@/components/IdeaFilter";
 import { Tags } from "@/constants";
-import PreLoader from "@/components/PreLoader";
 import Pagination from "@/components/Pagination";
 import Skeleton from "@/components/Skeleton";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { data, status } = useSession();

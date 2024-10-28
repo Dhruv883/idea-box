@@ -15,7 +15,7 @@ export default function Home() {
       <Navbar />
 
       <main className="flex-grow flex flex-col items-center justify-center text-center">
-        <h1 className="text-5xl font-bold mb-6">Login to IdeaHub</h1>
+        <h1 className="text-5xl font-bold mb-6">Login to IdeaBox</h1>
         <p className="text-xl text-gray-400 mb-8 max-w-2xl">
           Connect with innovators, share your ideas, and collaborate on exciting
           projects. Turn visions into reality.

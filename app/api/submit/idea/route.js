@@ -6,8 +6,12 @@ const prisma = new PrismaClient();
 export async function POST(request) {
   const token = await getToken({ req: request });
 
-  if (!token) {
-    return Response.json({ message: "Unauthorized" }, { status: 401 });
+  const user = await prisma.user.findUnique({
+    where: { email: token.email },
+  });
+
+  if (!user) {
+    return Response.json({ message: "User not found" }, { status: 404 });
   }
 
   const { title, domain, description, features, tags } = await request.json();
@@ -17,7 +21,7 @@ export async function POST(request) {
       title: title,
       domain: domain,
       description: description,
-      userId: token.id,
+      userId: user.id,
     },
   });
 

@@ -19,12 +19,15 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { Tags, TechStackTags } from "@/constants";
 import PreLoader from "@/components/PreLoader";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
+  const { data, status } = useSession();
+  const { toast } = useToast();
   const [techStack, setTechStack] = useState([]);
   const [tags, setTags] = useState([]);
-  const { toast } = useToast();
-  const { data, status } = useSession();
 
   const addTechStack = (tech) => {
     if (!techStack.includes(tech)) {
@@ -76,7 +79,9 @@ export default function Home() {
       tags,
     };
 
-    return postProject(formData);
+    postProject(formData);
+
+    router.push("/projects");
   };
 
   if (status == "loading") return <PreLoader />;
