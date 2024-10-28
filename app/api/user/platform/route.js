@@ -62,8 +62,6 @@ export async function POST(request) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("error: ", error);
-
     return Response.json(
       { message: "Error while updating user details" },
       { status: 500 }

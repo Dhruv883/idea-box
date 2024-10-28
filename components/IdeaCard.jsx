@@ -35,8 +35,6 @@ import Link from "next/link";
 import axios from "axios";
 
 const IdeaCard = ({ idea, onUpvoteChange }) => {
-  console.log(idea);
-
   const { data, status } = useSession();
 
   const [dialogState, setDialogState] = useState({ isOpen: false, type: null });
@@ -112,8 +110,6 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
           },
         }
       );
-
-      console.log("Responsee: ", response);
     } catch (error) {
       console.log("Error while creating Suggestion: ", error);
     }
@@ -133,8 +129,6 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
           },
         }
       );
-
-      console.log("Responsee: ", response);
     } catch (error) {
       console.log("Error while adding to Interested Developers: ", error);
     }
@@ -170,7 +164,7 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
         <div className="space-y-3 ">
           <div className="">
             Submitted by -{" "}
-            <Link href="/u/" className="hover:underline">
+            <Link href={`/u/${idea.user.username}`} className="hover:underline">
               {idea.user.name}
             </Link>
           </div>
@@ -275,7 +269,10 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
           <div className="space-y-6 sm:space-y-8">
             <div className="text-white text-sm sm:text-base">
               Submitted by -{" "}
-              <Link href="/u/" className="hover:underline">
+              <Link
+                href={`/u/${idea.user.username}`}
+                className="hover:underline"
+              >
                 {idea.user.name}
               </Link>
             </div>
@@ -463,6 +460,9 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
             {idea?.suggestions.map((suggestion) => (
               <div key={suggestion.id} className="mb-4 border p-4 rounded-lg">
                 <h4 className="font-bold">{suggestion.user.name}</h4>
+                <p className="text-sm text-gray-400">
+                  @{suggestion.user.username}
+                </p>
                 <p className="mt-2">{suggestion.suggestion}</p>
                 <p className="text-xs text-gray-500 mt-2">
                   {new Date(suggestion.createdAt).toLocaleString()}
@@ -488,20 +488,33 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
               Meet the people working / interested in working on this project
             </DrawerDescription>
           </DrawerHeader>
-          <ScrollArea className="p-4 h-full">
-            {idea?.interestedBy.map((collaborator) => (
-              <div key={collaborator.id} className="flex items-center mb-4">
-                <Avatar>
-                  <AvatarImage src={collaborator.avatar} />
-                  <AvatarFallback>{collaborator.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div className="ml-4">
-                  <h4 className="font-bold">{collaborator.name}</h4>
-                  <p className="text-sm">{collaborator.role}</p>
-                </div>
-              </div>
-            ))}
-            <ScrollBar orientation="vertical" />
+          <ScrollArea>
+            <div className="p-4 h-full w-full flex flex-row">
+              {idea?.interestedBy.map((collaborator) => (
+                <Link
+                  href={`/u/${collaborator.username}`}
+                  className="block w-80"
+                >
+                  <div
+                    key={collaborator.id}
+                    className="flex items-center mb-4 w-72 p-2 border-2 rounded-xl"
+                  >
+                    <Avatar>
+                      <AvatarImage src={collaborator.avatar} />
+                      <AvatarFallback>
+                        {collaborator.name.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="ml-4">
+                      <h4 className="font-bold">{collaborator.name}</h4>
+                      <p> @{collaborator.username}</p>
+                      <p className="text-sm">{collaborator.role}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <ScrollBar orientation="" />
           </ScrollArea>
         </DrawerContent>
       </Drawer>

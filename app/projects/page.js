@@ -46,7 +46,6 @@ export default function Home() {
       return matchesTags || matchesTechStack;
     });
   };
-  console.log(projects);
 
   const applyFilters = () => {
     setFilteredProjects(filterProjects());

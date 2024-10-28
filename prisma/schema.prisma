@@ -26,7 +26,7 @@ model User {
   suggestions     Suggestion[]
   profiles        UserProfile[]
   bio             String?
-  username        String?
+  username        String?       @unique
 }
 
 model UserProfile {

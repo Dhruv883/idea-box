@@ -22,8 +22,6 @@ import axios from "axios";
 import { useToast } from "@/components/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
-import ProjectCard from "@/components/ProjectCard";
-import IdeaCard from "@/components/IdeaCard";
 
 const initialPlatforms = [
   {
@@ -64,7 +62,7 @@ const initialPlatforms = [
   },
   {
     name: "Portfolio",
-    icon: "placeholder",
+    icon: "portfolio",
     pattern: `^https?:\/\/(?:www\.)?[a-zA-Z0-9_-]+\.[a-zA-Z]{2,}(?:\/[a-zA-Z0-9_-]*)*\/?$`,
     placeholder: "https://portfolio-website.com",
   },
@@ -86,6 +84,7 @@ export default function UserProfile() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isConnectDialogOpen, setIsConnectDialogOpen] = useState(false);
   const [isBioDialogOpen, setIsBioDialogOpen] = useState(false);
+  const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("liked");
   const [upvotedIdeas, setUpvotedIdeas] = useState();
   const [upvotedProjects, setUpvotedProjects] = useState();
@@ -128,8 +127,6 @@ export default function UserProfile() {
     if (!editingPlatform) return;
 
     const url = event.target.url.value;
-
-    console.log(event.target.url.value);
 
     const pattern = new RegExp(editingPlatform.pattern);
     if (!pattern.test(url)) {
@@ -196,6 +193,41 @@ export default function UserProfile() {
     }
   };
 
+  const handleUsernameSave = async (event) => {
+    event.preventDefault();
+    const prevUsername = user.username;
+    const newUsername = event.target.username.value;
+
+    try {
+      const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+      const response = await axios.post(
+        `${BACKEND_URL}/user/username`,
+        { username: newUsername },
+        { headers: { Authorization: `Bearer ${session?.accessToken}` } }
+      );
+
+      setUser({ ...user, username: response.data.username });
+      setIsUsernameDialogOpen(false);
+
+      if (session && session.user) {
+        session.user.username = response.data.username;
+      }
+
+      toast({
+        title: "Success",
+        description: "Username updated successfully",
+      });
+    } catch (error) {
+      console.error("Error updating username:", error);
+      setUser({ ...user, username: prevUsername });
+      toast({
+        title: "Error",
+        description: "Username Already Exists.",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (status === "loading") return <div>Loading...</div>;
   if (!user) return <div> User Not Found</div>;
 
@@ -211,8 +243,22 @@ export default function UserProfile() {
                 <AvatarImage src={user.image} />
                 <AvatarFallback>{user.name}</AvatarFallback>
               </Avatar>
+
               <div>
                 <h1 className="text-2xl font-bold">{user.name}</h1>
+                <div className="mt-2 flex justify-between items-center">
+                  <p className="text-sm">@{user.username || "username"}</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsUsernameDialogOpen(true)}
+                    className="ml-2"
+                  >
+                    <Edit2 className="h-4 w-4" />
+                    <span className="sr-only">Update username</span>
+                  </Button>
+                </div>
+
                 {user.bio ? (
                   <div className="mt-2 flex justify-between items-center">
                     <p className="text-sm">{user.bio}</p>
@@ -434,6 +480,32 @@ export default function UserProfile() {
                       defaultValue={user.bio}
                       placeholder="Tell us about yourself..."
                       rows={4}
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Save</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            {/* Edit Username */}
+            <Dialog
+              open={isUsernameDialogOpen}
+              onOpenChange={setIsUsernameDialogOpen}
+            >
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Update Username</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleUsernameSave} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      name="username"
+                      defaultValue={user.username}
+                      placeholder="Enter your username"
                     />
                   </div>
                   <DialogFooter>

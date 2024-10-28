@@ -99,7 +99,10 @@ const ProjectCard = ({ project }) => {
         <div className="space-y-3">
           <div>
             Submitted by -{" "}
-            <Link href={`/u/`} className="hover:underline">
+            <Link
+              href={`/u/${project.user.username}`}
+              className="hover:underline"
+            >
               {project.user.name}
             </Link>
           </div>
@@ -219,7 +222,10 @@ const ProjectCard = ({ project }) => {
 
             <div className="text-white text-sm sm:text-base">
               Submitted by -{" "}
-              <Link href={`/u/`} className="hover:underline">
+              <Link
+                href={`/u/${project.user.username}`}
+                className="hover:underline"
+              >
                 {project.user.name}
               </Link>
             </div>
