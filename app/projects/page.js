@@ -8,6 +8,8 @@ import axios from "axios";
 import { Tags, TechStackTags } from "@/constants";
 import ProjectFilter from "@/components/ProjectFilter";
 import Pagination from "@/components/Pagination";
+import PreLoader from "@/components/PreLoader";
+import SkeletonCard from "@/components/Skeleton";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -121,8 +123,6 @@ export default function Home() {
     setTotalPages(total);
   }, [totalProjects]);
 
-  if (status == "loading") return <div>loading</div>;
-
   return (
     <div className={`flex flex-col min-h-screen  relative`}>
       <Navbar />
@@ -153,9 +153,17 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-16 items-center justify-items-center">
-            {filteredProjects?.map((project) => (
-              <ProjectCard project={project} key={project.id} />
-            ))}
+            {!projects
+              ? Array(9)
+                  .fill(null)
+                  .map(() => (
+                    <SkeletonCard
+                      key={Math.random().toString(36).substr(2, 9)}
+                    />
+                  ))
+              : filteredProjects?.map((project) => (
+                  <ProjectCard project={project} key={project.id} />
+                ))}
           </div>
 
           <Pagination

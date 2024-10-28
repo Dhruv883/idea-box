@@ -16,6 +16,7 @@ import { useToast } from "@/components/hooks/use-toast";
 import { Tags } from "@/constants";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import PreLoader from "@/components/PreLoader";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -122,9 +123,7 @@ export default function Home() {
     }
   };
 
-  if (status == "loading") {
-    return <div>Loading....</div>;
-  }
+  if (status == "loading") return <PreLoader />;
 
   return (
     <div className="flex flex-col min-h-screen  relative">

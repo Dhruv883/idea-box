@@ -3,9 +3,12 @@ import Navbar from "@/components/Navbar";
 import { useSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import PreLoader from "@/components/PreLoader";
 
 export default function Home() {
   const { data, status } = useSession();
+
+  if (status == "loading") return <PreLoader />;
 
   return (
     <div className={`flex flex-col min-h-screen relative`}>
@@ -20,7 +23,7 @@ export default function Home() {
         <Button
           variant="secondary"
           className="w-full max-w-md py-6 gap-3 text-lg"
-          onClick={() => signIn("google")}
+          onClick={() => signIn("google", { callbackUrl: "/profile" })}
         >
           <Image src="/google.svg" width={20} height={20} alt="Google" />
           Sign in with Google

@@ -10,6 +10,7 @@ import IdeaFilter from "@/components/IdeaFilter";
 import { Tags } from "@/constants";
 import PreLoader from "@/components/PreLoader";
 import Pagination from "@/components/Pagination";
+import Skeleton from "@/components/Skeleton";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -109,8 +110,6 @@ export default function Home() {
     setTotalPages(total);
   }, [totalIdeas]);
 
-  if (status == "loading") return <div>Loading...</div>;
-
   return (
     <div className={`flex flex-col min-h-screen bg-black text-white relative`}>
       <Navbar />
@@ -139,9 +138,15 @@ export default function Home() {
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-16 items-center justify-items-center">
-            {filteredIdeas?.map((idea) => (
-              <IdeaCard idea={idea} key={idea.id} />
-            ))}
+            {!ideas
+              ? Array(9)
+                  .fill(null)
+                  .map(() => (
+                    <Skeleton key={Math.random().toString(36).substr(2, 9)} />
+                  ))
+              : filteredIdeas?.map((idea) => (
+                  <IdeaCard idea={idea} key={idea.id} />
+                ))}
           </div>
           <Pagination
             currentPage={currentPage}

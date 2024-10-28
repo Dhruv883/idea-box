@@ -11,6 +11,7 @@ import Image from "next/image";
 import IdeaCard from "@/components/IdeaCard";
 import ProjectCard from "@/components/ProjectCard";
 import Navbar from "@/components/Navbar";
+import PreLoader from "@/components/PreLoader";
 
 const platformIcons = {
   Dev: "dev",
@@ -51,6 +52,8 @@ export default function RefinedUserProfilePage({ params }) {
   useEffect(() => {
     fetchUser();
   }, []);
+
+  if (status == "loading") return <PreLoader />;
 
   return (
     <div className={`flex flex-col min-h-screen relative`}>

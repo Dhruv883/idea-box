@@ -22,6 +22,7 @@ import axios from "axios";
 import { useToast } from "@/components/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
+import PreLoader from "@/components/PreLoader";
 
 const initialPlatforms = [
   {
@@ -228,7 +229,7 @@ export default function UserProfile() {
     }
   };
 
-  if (status === "loading") return <div>Loading...</div>;
+  if (status == "loading") return <PreLoader />;
   if (!user) return <div> User Not Found</div>;
 
   return (

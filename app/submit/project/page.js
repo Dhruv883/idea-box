@@ -18,6 +18,7 @@ import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { Tags, TechStackTags } from "@/constants";
+import PreLoader from "@/components/PreLoader";
 
 export default function Home() {
   const [techStack, setTechStack] = useState([]);
@@ -77,6 +78,8 @@ export default function Home() {
 
     return postProject(formData);
   };
+
+  if (status == "loading") return <PreLoader />;
 
   const postProject = async (formData) => {
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;

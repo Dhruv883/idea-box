@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-export default function PulsingLoader() {
+export default function PreLoader() {
   return (
     <div className="flex justify-center items-center h-screen bg-[#232323]">
       <div className="flex space-x-2">
