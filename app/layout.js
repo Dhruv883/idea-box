@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import NextAuthProvider from "./NextAuthProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -27,6 +28,9 @@ export default function RootLayout({ children }) {
             {children}
           </ThemeProvider>
         </body>
+        <GoogleAnalytics
+          gaId={`${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+        />
       </html>
     </NextAuthProvider>
   );
