@@ -73,10 +73,11 @@ export default function Home() {
 
   const fetchIdeas = async () => {
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const tagsQuery = selectedTags.map((tag) => `tags=${tag}`).join("&");
 
     try {
       const response = await axios.get(
-        `${BACKEND_URL}/ideas?offset=${offset}&limit=${limit}`,
+        `${BACKEND_URL}/ideas?offset=${offset}&limit=${limit}&${tagsQuery}`,
         {
           headers: {
             Authorization: `Bearer ${data?.accessToken}`,
@@ -95,7 +96,7 @@ export default function Home() {
     if (data?.accessToken) {
       fetchIdeas();
     }
-  }, [data?.accessToken, currentPage]);
+  }, [data?.accessToken, currentPage, selectedTags]);
 
   useEffect(() => {
     const lowercasedTerm = searchTerm.toLowerCase();

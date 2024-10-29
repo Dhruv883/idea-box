@@ -17,8 +17,12 @@ export async function GET(request) {
   try {
     const offset = parseInt(request.nextUrl.searchParams.get("offset"));
     const limit = parseInt(request.nextUrl.searchParams.get("limit"));
+    const tags = request.nextUrl.searchParams.getAll("tags");
 
     const Ideas = await prisma.idea.findMany({
+      where: {
+        ...(tags.length > 0 && { tags: { some: { tag: { in: tags } } } }),
+      },
       skip: offset,
       take: limit,
       include: {
@@ -34,7 +38,11 @@ export async function GET(request) {
       },
     });
 
-    const ideaCount = await prisma.idea.count();
+    const ideaCount = await prisma.idea.count({
+      where: {
+        ...(tags.length > 0 && { tags: { some: { tag: { in: tags } } } }),
+      },
+    });
 
     return Response.json(
       {
