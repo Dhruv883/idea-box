@@ -4,6 +4,7 @@ import { useSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import PreLoader from "@/components/PreLoader";
+import Link from "next/link";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -28,6 +29,13 @@ export default function Home() {
           <Image src="/google.svg" width={20} height={20} alt="Google" />
           Sign in with Google
         </Button>
+
+        <p className="my-6">
+          By signing in, you agree to our{" "}
+          <Link href="/privacy" className="underline">
+            Privacy Policy
+          </Link>
+        </p>
       </main>
     </div>
   );
