@@ -20,6 +20,10 @@ export default function RootLayout({ children }) {
     <NextAuthProvider>
       <head>
         <link rel="icon" href="/favicon2.png" sizes="any" />
+        <meta
+          name="google-site-verification"
+          content={`${process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION}`}
+        />
       </head>
       <html lang="en">
         <body className={`${poppins.className} antialiased scroll-smooth`}>
