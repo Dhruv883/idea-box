@@ -91,10 +91,11 @@ export const authOptions = {
               name: user.name,
               email: user.email,
               image: user.image,
-              username: email.split("@")[0],
+              username: user.email.split("@")[0],
             },
           });
         }
+
         return true;
       } catch (error) {
         console.error("Error checking or adding user: ", error);
