@@ -22,7 +22,7 @@ export async function POST(request) {
     );
 
     if (alreadyUpvoted) {
-      return Response.json({ message: "Already upvoted" }, { status: 400 });
+      return Response.json({ message: "Already upvoted" }, { status: 409 }); // Changed to 409 Conflict
     }
 
     const updatedIdea = await prisma.idea.update({
@@ -33,7 +33,7 @@ export async function POST(request) {
       },
     });
 
-    return Response.json(updatedIdea);
+    return Response.json(updatedIdea, { status: 200 });
   } catch (error) {
     console.error("Error upvoting idea:", error);
     return Response.json({ message: "Error upvoting idea" }, { status: 500 });

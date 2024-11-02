@@ -22,8 +22,8 @@ export async function POST(request) {
       (idea) => idea.id === Number(ideaId)
     );
 
-    if (!hasUpvoted) {
-      return Response.json({ message: "Idea not upvoted" }, { status: 400 });
+   if (!hasUpvoted) {
+      return Response.json({ message: "Idea not upvoted" }, { status: 409 }); // Changed to 409 Conflict
     }
 
     const updatedIdea = await prisma.idea.update({
@@ -34,7 +34,7 @@ export async function POST(request) {
       },
     });
 
-    return Response.json(updatedIdea);
+    return Response.json(updatedIdea, { status: 200 })
   } catch (error) {
     console.error("Error removing upvote from idea:", error);
     return Response.json(

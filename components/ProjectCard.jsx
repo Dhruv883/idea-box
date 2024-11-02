@@ -28,22 +28,27 @@ const ProjectCard = ({ project }) => {
     upvoteCount: project.upvotes,
     isUpvoted: false,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleUpvoteProject = async () => {
-    const newIsUpvoted = !projectState.isUpvoted;
-    const newUpvoteCount = newIsUpvoted
-      ? projectState.upvoteCount + 1
-      : projectState.upvoteCount - 1;
+    if (isLoading) return;
+    setIsLoading(true);
+
+    const currentlyUpvoted = projectState.isUpvoted;
+    const currentCount = projectState.upvoteCount;
+
+    const newUpvoteCount = currentlyUpvoted
+      ? currentCount - 1
+      : currentCount + 1;
 
     setProjectState((prev) => ({
       ...prev,
-      isUpvoted: newIsUpvoted,
+      isUpvoted: !currentlyUpvoted,
       upvoteCount: newUpvoteCount,
     }));
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const endpoint = newIsUpvoted ? "upvote" : "removeUpvote";
-
+    const endpoint = currentlyUpvoted ? "removeUpvote" : "upvote";
     try {
       const response = await axios.post(
         `${BACKEND_URL}/projects/${endpoint}`,
@@ -64,9 +69,13 @@ const ProjectCard = ({ project }) => {
       console.error("Error updating upvote:", error);
       setProjectState((prev) => ({
         ...prev,
-        isUpvoted: !newIsUpvoted,
-        upvoteCount: newIsUpvoted ? newUpvoteCount - 1 : newUpvoteCount + 1,
+        isUpvoted: currentlyUpvoted,
+        upvoteCount: currentCount,
       }));
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
     }
   };
 
@@ -131,6 +140,7 @@ const ProjectCard = ({ project }) => {
                   variant="outline"
                   className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
                   onClick={toggleUpvoteProject}
+                  disabled={isLoading}
                 >
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -254,6 +264,7 @@ const ProjectCard = ({ project }) => {
                   variant="outline"
                   className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1"
                   onClick={toggleUpvoteProject}
+                  disabled={isLoading}
                 >
                   <AnimatePresence mode="wait">
                     <motion.div

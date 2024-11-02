@@ -11,6 +11,7 @@ import { Tags } from "@/constants";
 import Pagination from "@/components/Pagination";
 import Skeleton from "@/components/Skeleton";
 import { useRouter } from "next/navigation";
+import PreLoader from "@/components/PreLoader";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -115,6 +116,10 @@ export default function Home() {
     setTotalPages(total);
   }, [totalIdeas]);
 
+  if (status == "loading") {
+    return <PreLoader />;
+  }
+
   return (
     <div className={`flex flex-col min-h-screen bg-black text-white relative`}>
       <Navbar />
@@ -150,14 +155,16 @@ export default function Home() {
                     <Skeleton key={Math.random().toString(36).substr(2, 9)} />
                   ))
               : filteredIdeas?.map((idea) => (
-                  <IdeaCard idea={idea} key={idea.id} />
+                  <IdeaCard initialIdea={idea} key={idea.id} />
                 ))}
           </div>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          {ideas && ideas.length != 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </main>
     </div>

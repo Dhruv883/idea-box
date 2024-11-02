@@ -8,6 +8,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ArrowBigUp, MessageSquare, Users, ArrowUp } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/components/hooks/use-toast";
 
 import {
   Dialog,
@@ -34,8 +35,9 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import axios from "axios";
 
-const IdeaCard = ({ idea, onUpvoteChange }) => {
+const IdeaCard = ({ initialIdea }) => {
   const { data, status } = useSession();
+  const { toast } = useToast();
 
   const [dialogState, setDialogState] = useState({ isOpen: false, type: null });
   const [drawerState, setDrawerState] = useState({
@@ -49,27 +51,36 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
     interested: [],
   });
   const [ideaState, setIdeaState] = useState({
-    upvoteCount: idea.upvotes,
+    upvoteCount: initialIdea?.upvotes,
     isUpvoted: false,
     isInterested: false,
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [idea, setIdea] = useState(initialIdea);
 
   const handleSuggestionChange = (e) => {
     setSuggestion(e.target.value);
   };
 
   const toggleUpvoteIdea = async () => {
-    const newUpvoteCount = ideaState.isUpvoted
-      ? ideaState.upvoteCount - 1
-      : ideaState.upvoteCount + 1;
+    if (isLoading) return;
+    setIsLoading(true);
+
+    const currentlyUpvoted = ideaState.isUpvoted;
+    const currentCount = ideaState.upvoteCount;
+
+    const newUpvoteCount = currentlyUpvoted
+      ? currentCount - 1
+      : currentCount + 1;
+
     setIdeaState((prev) => ({
       ...prev,
-      isUpvoted: !prev.isUpvoted,
+      isUpvoted: !currentlyUpvoted,
       upvoteCount: newUpvoteCount,
     }));
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const endpoint = ideaState.isUpvoted ? "removeUpvote" : "upvote";
+    const endpoint = currentlyUpvoted ? "removeUpvote" : "upvote";
 
     try {
       const response = await axios.post(
@@ -88,16 +99,20 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
       }
     } catch (error) {
       console.error("Error updating upvote:", error);
-      // Revert the update in case of an error
       setIdeaState((prev) => ({
         ...prev,
-        isUpvoted: !prev.isUpvoted,
-        upvoteCount: ideaState.upvoteCount,
+        isUpvoted: currentlyUpvoted,
+        upvoteCount: currentCount,
       }));
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
     }
   };
 
-  const submitSuggestion = async (e) => {
+  const submitSuggestion = async (event) => {
+    event.preventDefault();
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     try {
@@ -110,8 +125,22 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
           },
         }
       );
+      setSuggestion("");
+
+      toast({
+        title: "Success",
+        description: "Suggestion submitted successfully.",
+      });
     } catch (error) {
+      toast({
+        title: "Errof",
+        description: "Couldnt Submit Suggestion. Please Try again later.",
+        variant: "destructive",
+      });
       console.log("Error while creating Suggestion: ", error);
+    } finally {
+      drawerState.suggestion = false;
+      fetchIdea();
     }
   };
 
@@ -131,48 +160,69 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
       );
     } catch (error) {
       console.log("Error while adding to Interested Developers: ", error);
+    } finally {
+      fetchIdea();
     }
   };
 
   useEffect(() => {
     setUserIdeas({
-      upvoted: data.user.upvotedIdeas.map((idea) => idea.id),
-      interested: data.user.interestedIdeas.map((idea) => idea.id),
+      upvoted: data.user.upvotedIdeas.map((idea) => idea?.id),
+      interested: data.user.interestedIdeas.map((idea) => idea?.id),
     });
   }, [data, status]);
 
   useEffect(() => {
     setIdeaState((prev) => ({
       ...prev,
-      isUpvoted: userIdeas.upvoted.includes(idea.id),
-      isInterested: userIdeas.interested.includes(idea.id),
+      isUpvoted: userIdeas.upvoted.includes(idea?.id),
+      isInterested: userIdeas.interested.includes(idea?.id),
     }));
-  }, [userIdeas, idea.id]);
+  }, [userIdeas, idea?.id]);
+
+  const fetchIdea = async () => {
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+    try {
+      const response = await axios.get(`${BACKEND_URL}/ideas/${idea.id}`, {
+        headers: {
+          Authorization: `Bearer ${data?.accessToken}`,
+        },
+      });
+
+      setIdea(response.data.idea);
+    } catch (error) {
+      console.log("Error fetching idea: ", error);
+    }
+  };
 
   return (
     <>
       <Card className="dark w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group bg-bgGray border-[#242424] text-white">
         <div className="space-y-2">
           <h3 className="text-2xl font-semibold max-h-16 text-ellipsis overflow-hidden">
-            {idea.title}
+            {idea?.title}
           </h3>
 
           <p className="max-h-12 text-ellipsis overflow-hidden text-textGray">
-            {idea.description}.
+            {idea?.description}.
           </p>
         </div>
         <div className="space-y-3 ">
           <div className="">
             Submitted by -{" "}
-            <Link href={`/u/${idea.user.username}`} className="hover:underline">
-              {idea.user.name}
+            <Link
+              href={`/u/${idea?.user.username}`}
+              className="hover:underline"
+            >
+              {idea?.user.name}
             </Link>
           </div>
 
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center justify-between w-full">
               <div className="flex gap-2 overflow-clip w-44">
-                {idea.tags.slice(0, 1).map((obj, index) => (
+                {idea?.tags.slice(0, 1).map((obj, index) => (
                   <Badge
                     key={obj.id}
                     className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
@@ -180,7 +230,7 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
                     {obj.tag}
                   </Badge>
                 ))}
-                {idea.tags.length > 1 && (
+                {idea?.tags.length > 1 && (
                   <Badge className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap">
                     +{idea.tags.length - 1}
                   </Badge>
@@ -194,8 +244,11 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
                 >
                   <Button
                     variant="outline"
-                    className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
+                    className={`bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1 px-2 py-1 ${
+                      isLoading ? "cursor-no-drop" : ""
+                    }`}
                     onClick={toggleUpvoteIdea}
+                    disabled={isLoading}
                   >
                     <AnimatePresence mode="wait">
                       <motion.div
@@ -247,10 +300,10 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
         <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none bg-bgGray text-white overflow-y-auto">
           <DialogHeader className="h-auto mb-4 sm:mb-6">
             <DialogTitle className="text-center text-xl sm:text-2xl md:text-4xl mb-2 sm:mb-4 text-white">
-              {idea.title}
+              {idea?.title}
             </DialogTitle>
             <DialogDescription className="text-center text-sm sm:text-base md:text-lg text-textGray">
-              {idea.description}
+              {idea?.description}
             </DialogDescription>
           </DialogHeader>
 
@@ -260,7 +313,7 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
               Features:
             </h3>
             <ul className="list-disc pl-5 text-textGray text-sm sm:text-base space-y-1 sm:space-y-2">
-              {idea.features.map((obj) => (
+              {idea?.features.map((obj) => (
                 <li key={obj.id}>{obj.feature}</li>
               ))}
             </ul>
@@ -270,10 +323,10 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
             <div className="text-white text-sm sm:text-base">
               Submitted by -{" "}
               <Link
-                href={`/u/${idea.user.username}`}
+                href={`/u/${idea?.user.username}`}
                 className="hover:underline"
               >
-                {idea.user.name}
+                {idea?.user.name}
               </Link>
             </div>
 
@@ -281,7 +334,7 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
               <span className="font-medium text-white text-sm sm:text-base">
                 Tags:{" "}
               </span>
-              {idea.tags.map((obj) => (
+              {idea?.tags.map((obj) => (
                 <Badge
                   key={obj.id}
                   className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2 text-xs sm:text-sm"
@@ -325,7 +378,7 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
                 <Users className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 View Interested Developers
               </Button>
-              {idea.userId !== data.user.id && (
+              {idea?.userId !== data?.user.id && (
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button
@@ -357,7 +410,7 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
                         onClick={handleInterestedInIdea}
                         disabled={ideaState.isInterested}
                       >
-                        I'm Still Interested
+                        I'm Interested
                       </Button>
                     </DialogFooter>
                   </DialogContent>
@@ -372,6 +425,7 @@ const IdeaCard = ({ idea, onUpvoteChange }) => {
                   variant="outline"
                   className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1"
                   onClick={toggleUpvoteIdea}
+                  disabled={isLoading}
                 >
                   <AnimatePresence mode="wait">
                     <motion.div

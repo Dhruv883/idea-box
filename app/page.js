@@ -1,8 +1,45 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import { Users, Zap, Globe, Target } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Footer from "@/components/Footer";
+import { useSession } from "next-auth/react";
+import PreLoader from "@/components/PreLoader";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+
+  if (status == "loading") return <PreLoader />;
+
+  const cardData = [
+    {
+      title: "Out-of-the-Box Ideas",
+      content:
+        "Explore unconventional concepts and groundbreaking innovations. Push the boundaries of creativity and inspire others!",
+      icon: <Zap className="h-10 w-10 text-white" />,
+    },
+    {
+      title: "Open Source Showcase",
+      content:
+        "Discover and contribute to groundbreaking open source projects. Showcase your work and collaborate with developers around the world.",
+      icon: <Globe className="h-10 w-10 text-white" />,
+    },
+    {
+      title: "Collaboration",
+      content:
+        "Find the perfect people to work with you. Build your dream team with ease.",
+      icon: <Users className="h-10 w-10 text-white" />,
+    },
+    {
+      title: "Idea Validation",
+      content:
+        "Get instant feedback on your concepts from our community of innovators and industry experts",
+      icon: <Target className="h-10 w-10 text-white" />,
+    },
+  ];
+
   return (
     <div className={`flex flex-col min-h-screen bg-black text-white relative `}>
       <Navbar />
@@ -40,6 +77,38 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      <section className="w-full  bg-black flex items-center justify-center">
+        <div className="px-4 md:px-6">
+          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl text-center mb-8 text-white">
+            Ideas That Look As Good As
+            <br />
+            They Innovate
+          </h2>
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-2">
+            {cardData.map((card, idx) => {
+              return (
+                <Card
+                  className="bg-bgGray border-[#242424] max-w-[30rem]"
+                  key={idx}
+                >
+                  <CardContent className="flex flex-col items-center space-y-4 p-6">
+                    <div className="p-4 bg-bgGray2 rounded-full">
+                      {card.icon}
+                    </div>
+                    <h3 className="text-2xl font-semibold text-white">
+                      {card.title}
+                    </h3>
+                    <p className="text-center text-textGray">{card.content}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

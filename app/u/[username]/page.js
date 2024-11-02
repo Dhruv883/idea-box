@@ -127,7 +127,7 @@ export default function RefinedUserProfilePage({ params }) {
             <TabsContent value="ideas">
               <div className="grid gap-6 md:grid-cols-3">
                 {userIdeas?.map((idea) => (
-                  <IdeaCard idea={idea} />
+                  <IdeaCard initialIdea={idea} />
                 ))}
               </div>
             </TabsContent>

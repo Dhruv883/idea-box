@@ -19,10 +19,10 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import { useToast } from "@/components/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import PreLoader from "@/components/PreLoader";
+import { useToast } from "@/components/hooks/use-toast";
 
 const initialPlatforms = [
   {
@@ -90,6 +90,8 @@ export default function UserProfile() {
   const [upvotedIdeas, setUpvotedIdeas] = useState();
   const [upvotedProjects, setUpvotedProjects] = useState();
   const [interestedIdeas, setInterestedIdeas] = useState();
+
+  console.log(upvotedIdeas);
 
   useEffect(() => {
     if (session?.user) {
@@ -172,7 +174,10 @@ export default function UserProfile() {
 
   const handleBioSave = async (event) => {
     event.preventDefault();
+    const oldBio = user.bio;
     const newBio = event.target.bio.value;
+
+    setUser({ ...user, bio: newBio });
 
     try {
       const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -182,7 +187,6 @@ export default function UserProfile() {
         { headers: { Authorization: `Bearer ${session?.accessToken}` } }
       );
 
-      setUser({ ...user, bio: response.data.bio });
       setIsBioDialogOpen(false);
 
       // Update the session data
@@ -190,14 +194,17 @@ export default function UserProfile() {
         session.user.bio = response.data.bio;
       }
     } catch (error) {
+      setUser({ ...user, bio: oldBio });
       console.error("Error updating bio:", error);
     }
   };
+  console.log(user);
 
   const handleUsernameSave = async (event) => {
     event.preventDefault();
     const prevUsername = user.username;
     const newUsername = event.target.username.value;
+    setUser({ ...user, username: newUsername });
 
     try {
       const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -207,7 +214,6 @@ export default function UserProfile() {
         { headers: { Authorization: `Bearer ${session?.accessToken}` } }
       );
 
-      setUser({ ...user, username: response.data.username });
       setIsUsernameDialogOpen(false);
 
       if (session && session.user) {
@@ -219,7 +225,6 @@ export default function UserProfile() {
         description: "Username updated successfully",
       });
     } catch (error) {
-      console.error("Error updating username:", error);
       setUser({ ...user, username: prevUsername });
       toast({
         title: "Error",
@@ -247,7 +252,7 @@ export default function UserProfile() {
 
               <div>
                 <h1 className="text-2xl font-bold">{user.name}</h1>
-                <div className="mt-2 flex justify-between items-center">
+                <div className="mt-2 flex justify-between items-center max-w-min">
                   <p className="text-sm">@{user.username || "username"}</p>
                   <Button
                     variant="ghost"
@@ -374,8 +379,11 @@ export default function UserProfile() {
 
                       <p className="text-sm text-muted-foreground">
                         by @
-                        <Link href="/u/" className="hover:underline">
-                          {idea.user.name}
+                        <Link
+                          href={`/u/${idea.user?.username}`}
+                          className="hover:underline"
+                        >
+                          {idea.user?.username}
                         </Link>
                       </p>
                     </Card>
@@ -387,8 +395,11 @@ export default function UserProfile() {
                       <h3 className="font-semibold">{idea.title}</h3>
                       <p className="text-sm text-muted-foreground">
                         by @
-                        <Link href="/u/" className="hover:underline">
-                          {idea.user.name}
+                        <Link
+                          href={`/u/${idea.user?.username}`}
+                          className="hover:underline"
+                        >
+                          {idea.user?.username}
                         </Link>
                       </p>
                     </Card>
@@ -402,8 +413,11 @@ export default function UserProfile() {
                       </h3>
                       <p className="text-sm text-muted-foreground">
                         by @
-                        <Link href="/u/" className="hover:underline">
-                          {project.user.name}
+                        <Link
+                          href={`/u/${project.user?.username}`}
+                          className="hover:underline"
+                        >
+                          {project.user?.username}
                         </Link>
                       </p>
                     </Card>

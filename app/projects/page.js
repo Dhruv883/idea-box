@@ -129,6 +129,10 @@ export default function Home() {
     setTotalPages(total);
   }, [totalProjects]);
 
+  if (status == "loading") {
+    return <PreLoader />;
+  }
+
   return (
     <div className={`flex flex-col min-h-screen  relative`}>
       <Navbar />
@@ -172,11 +176,13 @@ export default function Home() {
                 ))}
           </div>
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          {projects && projects.length != 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </main>
     </div>
