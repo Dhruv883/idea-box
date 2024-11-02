@@ -16,35 +16,37 @@ export async function POST(request) {
 
   const { title, domain, description, features, tags } = await request.json();
 
-  const Idea = await prisma.idea.create({
-    data: {
-      title: title,
-      domain: domain,
-      description: description,
-      userId: user.id,
-    },
-  });
+  try {
+    await prisma.$transaction(async (prisma) => {
+      const Idea = await prisma.idea.create({
+        data: {
+          title: title,
+          domain: domain,
+          description: description,
+          userId: user.id,
+        },
+      });
 
-  features.forEach(async (feat) => {
-    await prisma.feature.create({
-      data: {
+      const featureData = features.map((feat) => ({
         feature: feat,
         ideaId: Idea.id,
-      },
-    });
-  });
+      }));
 
-  tags.forEach(async (tag) => {
-    await prisma.ideaTag.create({
-      data: {
+      const tagData = tags.map((tag) => ({
         tag: tag,
         ideaId: Idea.id,
-      },
-    });
-  });
+      }));
 
-  return Response.json(
-    { message: "Idea Submitted Successfully" },
-    { status: 200 }
-  );
+      await prisma.feature.createMany({ data: featureData });
+      await prisma.ideaTag.createMany({ data: tagData });
+    });
+
+    return Response.json(
+      { message: "Idea Submitted Successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return Response.json({ message: "Failed to submit idea" }, { status: 500 });
+  }
 }

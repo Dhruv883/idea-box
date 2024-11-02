@@ -17,38 +17,43 @@ export async function POST(request) {
   const { name, title, domain, description, guidelines, url, techStack, tags } =
     await request.json();
 
-  const Project = await prisma.project.create({
-    data: {
-      name: name,
-      title: title,
-      domain: domain,
-      description: description,
-      guidelines: guidelines,
-      repositoryURL: url,
-      userId: user.id,
-    },
-  });
+  try {
+    await prisma.$transaction(async (prisma) => {
+      const Project = await prisma.project.create({
+        data: {
+          name: name,
+          title: title,
+          domain: domain,
+          description: description,
+          guidelines: guidelines,
+          repositoryURL: url,
+          userId: user.id,
+        },
+      });
 
-  techStack.forEach(async (technology) => {
-    await prisma.technology.create({
-      data: {
+      const techData = techStack.map((technology) => ({
         technology: technology,
         projectId: Project.id,
-      },
-    });
-  });
+      }));
 
-  tags.forEach(async (tag) => {
-    await prisma.projectTag.create({
-      data: {
+      const tagData = tags.map((tag) => ({
         tag: tag,
         projectId: Project.id,
-      },
-    });
-  });
+      }));
 
-  return Response.json(
-    { message: "Project Submitted Successfully" },
-    { status: 200 }
-  );
+      await prisma.technology.createMany({ data: techData });
+      await prisma.projectTag.createMany({ data: tagData });
+    });
+
+    return Response.json(
+      { message: "Project Submitted Successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return Response.json(
+      { message: "Failed to submit project" },
+      { status: 500 }
+    );
+  }
 }
