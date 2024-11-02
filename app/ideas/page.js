@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
+import { useToast } from "@/components/hooks/use-toast";
 import IdeaCard from "@/components/IdeaCard";
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
@@ -21,7 +21,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [customTag, setCustomTag] = useState("");
   const [filteredTags, setFilteredTags] = useState(Tags);
-
+  const { toast } = useToast();
   const [totalIdeas, setTotalIdeas] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -88,6 +88,10 @@ export default function Home() {
       setTotalIdeas(response.data.totalIdeas);
       setFilteredIdeas(response.data.ideas);
     } catch (error) {
+      toast({
+        title: "Failed to fetch Ideas",
+        variant: "destructive",
+      });
       console.log("Error while fetching ideas: ", error);
     }
   };

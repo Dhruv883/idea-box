@@ -10,6 +10,7 @@ import ProjectFilter from "@/components/ProjectFilter";
 import Pagination from "@/components/Pagination";
 import PreLoader from "@/components/PreLoader";
 import SkeletonCard from "@/components/Skeleton";
+import { useToast } from "@/components/hooks/use-toast";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -22,6 +23,7 @@ export default function Home() {
   const [filteredTags, setFilteredTags] = useState(Tags);
   const [filteredTechStack, setFilteredTechStack] = useState(TechStackTags);
   const [selectedTechStack, setSelectedTechStack] = useState([]);
+  const { toast } = useToast();
 
   const [totalProjects, setTotalProjects] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,6 +81,10 @@ export default function Home() {
       setTotalProjects(response.data.totalProjects);
       setFilteredProjects(response.data.projects);
     } catch (error) {
+      toast({
+        title: "Failed to fetch Projects",
+        variant: "destructive",
+      });
       console.log("Error while fetching projects: ", error);
     }
   };

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+import { useToast } from "@/components/hooks/use-toast";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -31,6 +31,7 @@ export default function RefinedUserProfilePage({ params }) {
   const [connectedPlatforms, setConnectedPlatforms] = useState();
   const [userIdeas, setUserIdeas] = useState();
   const [userProjects, setUserProjects] = useState();
+  const { toast } = useToast();
 
   const fetchUser = async () => {
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -46,14 +47,19 @@ export default function RefinedUserProfilePage({ params }) {
       setConnectedPlatforms(response.data.user.profiles);
       setUserIdeas(response.data.user.ideas);
       setUserProjects(response.data.user.projects);
-    } catch (error) {}
+    } catch (error) {
+      toast({
+        title: "Failed to fetch Profile",
+        variant: "destructive",
+      });
+    }
   };
 
   useEffect(() => {
     fetchUser();
   }, []);
 
-  if (status == "loading") return <PreLoader />;
+  if (status == "loading" || !user) return <PreLoader />;
 
   return (
     <div className={`flex flex-col min-h-screen relative`}>
