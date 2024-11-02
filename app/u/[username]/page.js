@@ -89,23 +89,25 @@ export default function RefinedUserProfilePage({ params }) {
                     {connectedPlatforms?.map((platform) => {
                       return (
                         <Button
-                          key={platform.type}
+                          key={platform?.type}
                           variant="outline"
                           className="border-2 px-4 py-5 flex items-center justify-center"
                           asChild
                         >
                           <a
-                            href={platform.profileUrl}
+                            href={platform?.profileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center"
                           >
                             {/* <Icon className="h-4 w-4" /> */}
                             <Image
-                              src={`/icons/${platformIcons[platform.type]}.svg`}
+                              src={`/icons/${
+                                platformIcons[platform?.type]
+                              }.svg`}
                               width={25}
                               height={25}
-                              alt={platform.type}
+                              alt={platform?.type}
                             />
                           </a>
                         </Button>
