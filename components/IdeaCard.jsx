@@ -215,7 +215,7 @@ const IdeaCard = ({ initialIdea }) => {
               href={`/u/${idea?.user.username}`}
               className="hover:underline"
             >
-              {idea?.user.name}
+              @{idea?.user.username}
             </Link>
           </div>
 
@@ -321,12 +321,12 @@ const IdeaCard = ({ initialIdea }) => {
 
           <div className="space-y-6 sm:space-y-8">
             <div className="text-white text-sm sm:text-base">
-              Submitted by -{" "}
+              Submitted by - {idea?.user.name}{" "}
               <Link
                 href={`/u/${idea?.user.username}`}
                 className="hover:underline"
               >
-                {idea?.user.name}
+                (@{idea?.user.username})
               </Link>
             </div>
 

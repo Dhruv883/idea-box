@@ -73,6 +73,7 @@ export default function Home() {
         {
           headers: {
             Authorization: `Bearer ${data?.accessToken}`,
+            headers: { "Cache-Control": "no-store" },
           },
         }
       );

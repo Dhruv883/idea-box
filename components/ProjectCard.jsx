@@ -112,7 +112,7 @@ const ProjectCard = ({ project }) => {
               href={`/u/${project.user.username}`}
               className="hover:underline"
             >
-              {project.user.name}
+              {project.user.username}
             </Link>
           </div>
           <div className="flex items-center justify-between gap-1">
@@ -231,12 +231,12 @@ const ProjectCard = ({ project }) => {
             </div>
 
             <div className="text-white text-sm sm:text-base">
-              Submitted by -{" "}
+              Submitted by - {project.user.name}{" "}
               <Link
                 href={`/u/${project.user.username}`}
                 className="hover:underline"
               >
-                {project.user.name}
+                (@{project.user.username})
               </Link>
             </div>
 

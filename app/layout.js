@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <NextAuthProvider>
       <head>
-        <link rel="icon" href="/favicon2.png" sizes="any" />
+        <link rel="icon" href="/favicon.png" sizes="any" />
         <meta
           name="google-site-verification"
           content={`${process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION}`}
