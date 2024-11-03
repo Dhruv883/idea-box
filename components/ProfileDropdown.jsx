@@ -30,7 +30,7 @@ export const ProfileDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Avatar>
           <AvatarImage src={data.user.image} />
-          <AvatarFallback>{data.user.name}</AvatarFallback>
+          <AvatarFallback>{data.user.name[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">

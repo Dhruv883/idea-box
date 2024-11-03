@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import PreLoader from "@/components/PreLoader";
 import { useToast } from "@/components/hooks/use-toast";
+import { useTheme } from "next-themes";
 
 const initialPlatforms = [
   {
@@ -77,6 +78,7 @@ const initialPlatforms = [
 
 export default function UserProfile() {
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   const { data: session, status } = useSession();
   const [user, setUser] = useState(null);
@@ -90,8 +92,6 @@ export default function UserProfile() {
   const [upvotedIdeas, setUpvotedIdeas] = useState();
   const [upvotedProjects, setUpvotedProjects] = useState();
   const [interestedIdeas, setInterestedIdeas] = useState();
-
-  console.log(upvotedIdeas);
 
   useEffect(() => {
     if (session?.user) {
@@ -247,7 +247,7 @@ export default function UserProfile() {
             <div className="flex items-center space-x-4 mb-8">
               <Avatar className="w-24 h-24">
                 <AvatarImage src={user.image} />
-                <AvatarFallback>{user.name}</AvatarFallback>
+                <AvatarFallback>{user.name[0]}</AvatarFallback>
               </Avatar>
 
               <div>
@@ -306,8 +306,9 @@ export default function UserProfile() {
                     <div className="flex items-center space-x-3">
                       <Image
                         src={`/icons/${platform.icon}.svg`}
-                        width={25}
-                        height={25}
+                        width={35}
+                        height={35}
+                        className="text-black"
                         alt={platform.name}
                       />
                       <span className="font-medium text-sm">

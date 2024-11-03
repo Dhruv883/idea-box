@@ -96,7 +96,7 @@ const ProjectCard = ({ project }) => {
 
   return (
     <>
-      <Card className="w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group bg-bgGray border-[#242424] text-white">
+      <Card className="w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group dark:bg-bgGray border-[#242424] bg-[#FBFBFB] shadow-md">
         <div className="space-y-2">
           <h3 className="text-2xl font-semibold max-h-16 text-ellipsis overflow-hidden">
             {project.name}
@@ -118,15 +118,12 @@ const ProjectCard = ({ project }) => {
           <div className="flex items-center justify-between gap-1">
             <div className="flex flex-wrap gap-2 h-6 overflow-hidden w-full">
               {project.tags.slice(0, 1).map((obj, index) => (
-                <Badge
-                  key={obj.id}
-                  className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
-                >
+                <Badge key={obj.id} className="text-nowrap" variant="secondary">
                   {obj.tag}
                 </Badge>
               ))}
               {project.tags.length > 1 && (
-                <Badge className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap">
+                <Badge className="text-nowrap" variant="secondary">
                   +{project.tags.length - 1}
                 </Badge>
               )}
@@ -137,8 +134,8 @@ const ProjectCard = ({ project }) => {
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <Button
-                  variant="outline"
-                  className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
+                  variant="secondary"
+                  className="text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
                   onClick={toggleUpvoteProject}
                   disabled={isLoading}
                 >
@@ -179,7 +176,7 @@ const ProjectCard = ({ project }) => {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none bg-bgGray text-white overflow-y-auto">
+        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none  overflow-y-auto dark:bg-bgGray">
           <DialogHeader className="space-y-4 pt-8 text-center">
             <DialogTitle className="space-y-2 text-3xl font-bold sm:text-4xl md:text-5xl flex flex-col items-center">
               <span className="">{project.name}</span>
@@ -194,7 +191,7 @@ const ProjectCard = ({ project }) => {
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-white">
+              <h3 className="text-lg sm:text-xl font-semibold mb-2">
                 Contributor Guidelines:
               </h3>
               <p className="text-textGray">{project.guidelines}</p>
@@ -202,13 +199,14 @@ const ProjectCard = ({ project }) => {
 
             <div className="space-y-4">
               <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium text-white text-sm sm:text-base">
+                <span className="font-medium text-sm sm:text-base">
                   Tech Stack:{" "}
                 </span>
                 {project.technologies.map((obj) => (
                   <Badge
                     key={obj.id}
-                    className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2 text-xs sm:text-sm"
+                    variant="secondary"
+                    className="py-1 px-2 text-xs sm:text-sm"
                   >
                     {obj.technology}
                   </Badge>
@@ -216,13 +214,12 @@ const ProjectCard = ({ project }) => {
               </div>
 
               <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium text-white text-sm sm:text-base">
-                  Tags:{" "}
-                </span>
+                <span className="font-medium text-sm sm:text-base">Tags: </span>
                 {project.tags.map((obj) => (
                   <Badge
                     key={obj.id}
-                    className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2 text-xs sm:text-sm"
+                    variant="secondary"
+                    className="py-1 px-2 text-xs sm:text-sm"
                   >
                     {obj.tag}
                   </Badge>
@@ -230,7 +227,7 @@ const ProjectCard = ({ project }) => {
               </div>
             </div>
 
-            <div className="text-white text-sm sm:text-base">
+            <div className="text-sm sm:text-base">
               Submitted by - {project.user.name}{" "}
               <Link
                 href={`/u/${project.user.username}`}
@@ -241,11 +238,7 @@ const ProjectCard = ({ project }) => {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <Button
-                variant="outline"
-                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
-                asChild
-              >
+              <Button variant="outline" className="text-xs sm:text-sm" asChild>
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
@@ -262,7 +255,7 @@ const ProjectCard = ({ project }) => {
               >
                 <Button
                   variant="outline"
-                  className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1"
+                  className="text-xs sm:text-sm flex items-center gap-1"
                   onClick={toggleUpvoteProject}
                   disabled={isLoading}
                 >

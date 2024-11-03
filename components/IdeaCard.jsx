@@ -1,6 +1,5 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +8,13 @@ import { ArrowBigUp, MessageSquare, Users, ArrowUp } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/components/hooks/use-toast";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import {
   Dialog,
@@ -298,7 +304,7 @@ const IdeaCard = ({ initialIdea }) => {
         open={dialogState.isOpen}
         onOpenChange={() => setDialogState({ isOpen: false, type: null })}
       >
-        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none  overflow-y-auto">
+        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none  overflow-y-auto dark:bg-bgGray">
           <DialogHeader className="h-auto mb-4 sm:mb-6">
             <DialogTitle className="text-center text-xl sm:text-2xl md:text-4xl mb-2 sm:mb-4 ">
               {idea?.title}
@@ -469,9 +475,9 @@ const IdeaCard = ({ initialIdea }) => {
           setDrawerState((prev) => ({ ...prev, suggestion: false }))
         }
       >
-        <DrawerContent className="bg-bgGray">
+        <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle className="text-white">Suggest Features</DrawerTitle>
+            <DrawerTitle>Suggest Features</DrawerTitle>
             <DrawerDescription>
               What features would you like to see in this project?
             </DrawerDescription>
@@ -503,7 +509,7 @@ const IdeaCard = ({ initialIdea }) => {
           setDrawerState((prev) => ({ ...prev, viewSuggestions: false }))
         }
       >
-        <DrawerContent className="bg-bgGray">
+        <DrawerContent>
           <DrawerHeader>
             <DrawerTitle className="text-2xl">View Suggestions</DrawerTitle>
             <DrawerDescription className="text-lg">
@@ -511,18 +517,35 @@ const IdeaCard = ({ initialIdea }) => {
             </DrawerDescription>
           </DrawerHeader>
           <ScrollArea className="p-4 h-[400px] whitespace-nowrap">
-            {idea?.suggestions.map((suggestion) => (
-              <div key={suggestion.id} className="mb-4 border p-4 rounded-lg">
-                <h4 className="font-bold">{suggestion.user.name}</h4>
-                <p className="text-sm text-gray-400">
-                  @{suggestion.user.username}
-                </p>
-                <p className="mt-2">{suggestion.suggestion}</p>
-                <p className="text-xs text-gray-500 mt-2">
-                  {new Date(suggestion.createdAt).toLocaleString()}
-                </p>
-              </div>
-            ))}
+            {!idea?.suggestions?.length ? (
+              <div className="text-4xl text-center italic">No Suggestions</div>
+            ) : (
+              idea.suggestions.map((suggestion) => (
+                <Card key={suggestion.id} className="mb-4">
+                  <CardHeader className="flex items-center gap-4">
+                    <Avatar>
+                      <AvatarImage
+                        src={suggestion.user.image}
+                        alt={suggestion.user.name}
+                      />
+                      <AvatarFallback>{suggestion.user.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <CardTitle>{suggestion.user.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(suggestion.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="whitespace-pre-wrap">
+                      {suggestion.suggestion}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+
             <ScrollBar orientation="vertical" />
           </ScrollArea>
         </DrawerContent>
@@ -535,38 +558,45 @@ const IdeaCard = ({ initialIdea }) => {
           setDrawerState((prev) => ({ ...prev, viewCollaborators: false }))
         }
       >
-        <DrawerContent className="bg-bgGray">
+        <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>View Interested Builders</DrawerTitle>
             <DrawerDescription>
               Meet the people working / interested in working on this project
             </DrawerDescription>
           </DrawerHeader>
-          <ScrollArea>
+          <ScrollArea className="p-4 h-[200px] whitespace-nowrap">
             <div className="p-4 h-full w-full flex flex-row">
-              {idea?.interestedBy.map((collaborator) => (
-                <Link
-                  href={`/u/${collaborator.username}`}
-                  className="block w-80"
-                >
-                  <div
+              {!idea?.interestedBy?.length ? (
+                <div className="text-4xl text-center italic w-full">
+                  No Interested Developers...Yet
+                </div>
+              ) : (
+                idea.interestedBy.map((collaborator) => (
+                  <Link
                     key={collaborator.id}
-                    className="flex items-center mb-4 w-72 p-2 border-2 rounded-xl"
+                    href={`/u/${collaborator.username}`}
+                    className="block w-80"
                   >
-                    <Avatar>
-                      <AvatarImage src={collaborator.avatar} />
-                      <AvatarFallback>
-                        {collaborator.name.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="ml-4">
-                      <h4 className="font-bold">{collaborator.name}</h4>
-                      <p> @{collaborator.username}</p>
-                      <p className="text-sm">{collaborator.role}</p>
+                    <div className="flex items-center mb-4 w-72 p-2 border-2 rounded-xl">
+                      <Avatar>
+                        <AvatarImage
+                          src={collaborator.avatar}
+                          alt={collaborator.name}
+                        />
+                        <AvatarFallback>
+                          {collaborator.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="ml-4">
+                        <h4 className="font-bold">{collaborator.name}</h4>
+                        <p>@{collaborator.username}</p>
+                        <p className="text-sm">{collaborator.role}</p>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))
+              )}
             </div>
             <ScrollBar orientation="" />
           </ScrollArea>

@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       </head>
       <html lang="en">
         <body className={`${poppins.className} antialiased scroll-smooth`}>
-          <ThemeProvider attribute="class" defaultTheme="light">
+          <ThemeProvider attribute="class" defaultTheme="dark">
             <Toaster />
             {children}
           </ThemeProvider>

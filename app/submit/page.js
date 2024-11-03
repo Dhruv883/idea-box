@@ -35,14 +35,16 @@ export default function Home() {
         <section className="min-h-screen w-full flex justify-center pt-24">
           <div className="w-3/4 flex flex-col items-center">
             <h1 className="text-center text-3xl font-semibold sm:text-4xl md:text-5xl py-6">
-              Submit Ideas, Projects
+              Submit Ideas / Projects
             </h1>
             <div className="grid lg:grid-cols-2 gap-16 py-12">
               {menu.map((item, idx) => {
                 return (
                   <div key={idx} className="cursor-pointer">
                     <Link href={`/submit/${item.link}`}>
-                      <Card className={`group w-96 h-full `}>
+                      <Card
+                        className={`group w-96 h-full dark:bg-bgGray dark:border-[#242424] shadow-md`}
+                      >
                         <CardContent className="flex flex-col items-center p-6 h-full text-center">
                           <span
                             className={`p-3 rounded-full mb-4 bg-secondary`}

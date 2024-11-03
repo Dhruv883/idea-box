@@ -72,7 +72,7 @@ export default function RefinedUserProfilePage({ params }) {
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <Avatar className="w-32 h-32">
                   <AvatarImage src={user?.image} alt={user?.name} />
-                  <AvatarFallback>{user?.name}</AvatarFallback>
+                  <AvatarFallback>{user?.name[0]}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 text-center md:text-left">
                   <h1 className="text-3xl font-bold">{user?.name}</h1>
