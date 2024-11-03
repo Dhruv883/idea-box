@@ -80,8 +80,6 @@ export default function Home() {
     };
 
     postProject(formData);
-
-    router.push("/projects");
   };
 
   if (status == "loading") return <PreLoader />;
@@ -100,14 +98,19 @@ export default function Home() {
         }
       );
 
-      toast({
-        title: "Success",
-        description: "Project submitted successfully!",
-      });
+      if (response.status == 200) {
+        toast({
+          title: "Success",
+          description: "Project submitted successfully!",
+        });
+
+        router.push("/projects");
+      }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to submit your Project. Please try again.",
+        description:
+          "Failed to submit your Project. Please check the entered details and try again.",
         variant: "destructive",
       });
     }

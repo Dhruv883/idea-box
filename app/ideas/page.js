@@ -122,7 +122,7 @@ export default function Home() {
   }
 
   return (
-    <div className={`flex flex-col min-h-screen bg-black text-white relative`}>
+    <div className={`flex flex-col min-h-screen  relative`}>
       <Navbar />
       <main className="flex-1 pt-16">
         <div className="mx-auto p-4 sm:p-6 lg:p-8 ">

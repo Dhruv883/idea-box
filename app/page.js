@@ -41,11 +41,13 @@ export default function Home() {
   ];
 
   return (
-    <div className={`flex flex-col min-h-screen bg-black text-white relative `}>
+    <div
+      className={`flex flex-col min-h-screen dark:bg-black dark:text-white bg-white text-black relative `}
+    >
       <Navbar />
 
       <main className="flex-1">
-        <section className="h-screen w-full flex items-center justify-center">
+        <section className="h-screen w-full flex items-center justify-center ">
           <div className="w-3/4">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-4">
@@ -78,12 +80,12 @@ export default function Home() {
         </section>
       </main>
 
-      <section className="w-full  bg-black flex items-center justify-center">
-        <div className="px-4 md:px-6">
+      <section className="w-full  light:bg-black flex items-center justify-center bg-black">
+        <div className="px-4 md:px-6 py-16">
           <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl text-center mb-8 text-white">
-            Ideas That Look As Good As
+            Where Bold Ideas Meet
             <br />
-            They Innovate
+            Real Collaboration
           </h2>
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-2">
             {cardData.map((card, idx) => {

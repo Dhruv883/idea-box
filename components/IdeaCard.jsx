@@ -198,7 +198,7 @@ const IdeaCard = ({ initialIdea }) => {
 
   return (
     <>
-      <Card className="dark w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group bg-bgGray border-[#242424] text-white">
+      <Card className="w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group dark:bg-bgGray border-[#242424] bg-[#FBFBFB] shadow-md">
         <div className="space-y-2">
           <h3 className="text-2xl font-semibold max-h-16 text-ellipsis overflow-hidden">
             {idea?.title}
@@ -222,16 +222,17 @@ const IdeaCard = ({ initialIdea }) => {
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center justify-between w-full">
               <div className="flex gap-2 overflow-clip w-44">
-                {idea?.tags.slice(0, 1).map((obj, index) => (
+                {idea?.tags.slice(0, 1).map((obj) => (
                   <Badge
                     key={obj.id}
-                    className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap"
+                    className="text-nowrap"
+                    variant="secondary"
                   >
                     {obj.tag}
                   </Badge>
                 ))}
                 {idea?.tags.length > 1 && (
-                  <Badge className="bg-bgGray2 hover:bg-bgGray2 text-textGray text-nowrap">
+                  <Badge className="text-nowrap" variant="secondary">
                     +{idea.tags.length - 1}
                   </Badge>
                 )}
@@ -243,8 +244,8 @@ const IdeaCard = ({ initialIdea }) => {
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 >
                   <Button
-                    variant="outline"
-                    className={`bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1 px-2 py-1 ${
+                    variant="secondary"
+                    className={`text-xs sm:text-sm flex items-center gap-1 px-2 py-1 ${
                       isLoading ? "cursor-no-drop" : ""
                     }`}
                     onClick={toggleUpvoteIdea}
@@ -297,9 +298,9 @@ const IdeaCard = ({ initialIdea }) => {
         open={dialogState.isOpen}
         onOpenChange={() => setDialogState({ isOpen: false, type: null })}
       >
-        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none bg-bgGray text-white overflow-y-auto">
+        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none  overflow-y-auto">
           <DialogHeader className="h-auto mb-4 sm:mb-6">
-            <DialogTitle className="text-center text-xl sm:text-2xl md:text-4xl mb-2 sm:mb-4 text-white">
+            <DialogTitle className="text-center text-xl sm:text-2xl md:text-4xl mb-2 sm:mb-4 ">
               {idea?.title}
             </DialogTitle>
             <DialogDescription className="text-center text-sm sm:text-base md:text-lg text-textGray">
@@ -309,7 +310,7 @@ const IdeaCard = ({ initialIdea }) => {
 
           {/* Features Section */}
           <div>
-            <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4 text-white">
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4 ">
               Features:
             </h3>
             <ul className="list-disc pl-5 text-textGray text-sm sm:text-base space-y-1 sm:space-y-2">
@@ -320,7 +321,7 @@ const IdeaCard = ({ initialIdea }) => {
           </div>
 
           <div className="space-y-6 sm:space-y-8">
-            <div className="text-white text-sm sm:text-base">
+            <div className="text-sm sm:text-base">
               Submitted by - {idea?.user.name}{" "}
               <Link
                 href={`/u/${idea?.user.username}`}
@@ -331,13 +332,12 @@ const IdeaCard = ({ initialIdea }) => {
             </div>
 
             <div className="flex flex-wrap gap-2 items-center">
-              <span className="font-medium text-white text-sm sm:text-base">
-                Tags:{" "}
-              </span>
+              <span className="font-medium text-sm sm:text-base">Tags: </span>
               {idea?.tags.map((obj) => (
                 <Badge
                   key={obj.id}
-                  className="bg-bgGray2 hover:bg-bgGray2 text-textGray py-1 px-2 text-xs sm:text-sm"
+                  variant="secondary"
+                  className="py-1 px-2 text-xs sm:text-sm"
                 >
                   {obj.tag}
                 </Badge>
@@ -350,7 +350,7 @@ const IdeaCard = ({ initialIdea }) => {
                 onClick={() =>
                   setDrawerState((prev) => ({ ...prev, suggestion: true }))
                 }
-                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
+                className="text-xs sm:text-sm"
               >
                 <MessageSquare className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 Suggest Features
@@ -360,7 +360,7 @@ const IdeaCard = ({ initialIdea }) => {
                 onClick={() =>
                   setDrawerState((prev) => ({ ...prev, viewSuggestions: true }))
                 }
-                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
+                className="text-xs sm:text-sm"
               >
                 <MessageSquare className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 View Suggestions
@@ -373,7 +373,7 @@ const IdeaCard = ({ initialIdea }) => {
                     viewCollaborators: true,
                   }))
                 }
-                className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm"
+                className="text-xs sm:text-sm"
               >
                 <Users className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 View Interested Developers
@@ -383,7 +383,7 @@ const IdeaCard = ({ initialIdea }) => {
                   <DialogTrigger asChild>
                     <Button
                       variant="outline"
-                      className={`bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm ${
+                      className={`text-xs sm:text-sm ${
                         ideaState.isInterested
                           ? "opacity-50 cursor-not-allowed"
                           : ""
@@ -423,7 +423,7 @@ const IdeaCard = ({ initialIdea }) => {
               >
                 <Button
                   variant="outline"
-                  className="bg-bgGray2 text-white border border-bgGray2 text-xs sm:text-sm flex items-center gap-1"
+                  className="text-xs sm:text-sm flex items-center gap-1"
                   onClick={toggleUpvoteIdea}
                   disabled={isLoading}
                 >

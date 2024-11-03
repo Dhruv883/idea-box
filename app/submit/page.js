@@ -42,11 +42,11 @@ export default function Home() {
                 return (
                   <div key={idx} className="cursor-pointer">
                     <Link href={`/submit/${item.link}`}>
-                      <Card
-                        className={`group w-96 h-full bg-bgGray text-white border-[#242424]`}
-                      >
+                      <Card className={`group w-96 h-full `}>
                         <CardContent className="flex flex-col items-center p-6 h-full text-center">
-                          <span className={`p-3 rounded-full mb-4 bg-bgGray2`}>
+                          <span
+                            className={`p-3 rounded-full mb-4 bg-secondary`}
+                          >
                             {item.icon}
                           </span>
                           <h2 className="text-xl font-semibold mb-2">

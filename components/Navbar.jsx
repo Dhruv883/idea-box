@@ -6,15 +6,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { ProfileDropdown } from "./ProfileDropdown";
+import { useTheme } from "next-themes";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { data, status } = useSession();
+  const { theme } = useTheme();
 
   return (
     <div className="absolute z-20 w-full flex items-center justify-between p-5">
       <Link href="/">
-        <Image src="/logo.png" width={200} height={200} alt="Logo" />
+        <Image
+          src={theme == "dark" ? "/logo.png" : "/logo-black.png"}
+          width={200}
+          height={200}
+          alt="Logo"
+        />
       </Link>
 
       <div className="md:hidden">
@@ -27,7 +34,7 @@ export default function Navbar() {
       </div>
 
       <div
-        className={`flex-col md:flex-row md:flex md:items-center md:gap-x-8 text-xl border-b-2 border-b-black md:border-none absolute md:relative bg-black md:bg-transparent top-16 md:top-auto right-0 md:right-auto w-full md:w-auto p-4 md:p-0 text-white  ${
+        className={`flex-col md:flex-row md:flex md:items-center md:gap-x-8 text-xl border-b-2 border-b-black md:border-none absolute md:relative bg-black md:bg-transparent top-16 md:top-auto right-0 md:right-auto w-full md:w-auto p-4 md:p-0 dark:text-white test-black  ${
           isOpen ? "flex" : "hidden"
         }`}
       >

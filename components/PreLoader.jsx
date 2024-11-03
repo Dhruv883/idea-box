@@ -4,7 +4,7 @@ export default function PreLoader() {
       <div role="status">
         <svg
           aria-hidden="true"
-          className="w-20 h-20 animate-spin text-gray-800 fill-white"
+          className="w-20 h-20 animate-spin"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

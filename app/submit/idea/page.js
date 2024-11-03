@@ -97,7 +97,6 @@ export default function Home() {
     };
 
     postIdea(formData);
-    router.push("/ideas");
   };
 
   const postIdea = async (formData) => {
@@ -114,14 +113,18 @@ export default function Home() {
         }
       );
 
-      toast({
-        title: "Success",
-        description: "Project idea submitted successfully!",
-      });
+      if (response.status == 200) {
+        toast({
+          title: "Success",
+          description: "Project idea submitted successfully!",
+        });
+        router.push("/ideas");
+      }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to submit your idea. Please try again.",
+        description:
+          "Failed to submit your idea. Please check the entered details and try again.",
         variant: "destructive",
       });
     }
