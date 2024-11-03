@@ -486,7 +486,7 @@ const IdeaCard = ({ initialIdea }) => {
             <Textarea
               id="suggestion"
               placeholder="Type your suggestions / features here..."
-              className="min-h-[200px]"
+              className="min-h-[150px]"
               value={suggestion}
               onChange={handleSuggestionChange}
             />
@@ -522,7 +522,7 @@ const IdeaCard = ({ initialIdea }) => {
             ) : (
               idea.suggestions.map((suggestion) => (
                 <Card key={suggestion.id} className="mb-4">
-                  <CardHeader className="flex items-center gap-4">
+                  <CardHeader className="flex gap-4">
                     <Avatar>
                       <AvatarImage
                         src={suggestion.user.image}

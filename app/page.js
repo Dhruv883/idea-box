@@ -7,6 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import Footer from "@/components/Footer";
 import { useSession } from "next-auth/react";
 import PreLoader from "@/components/PreLoader";
+import { cn } from "@/lib/utils";
+import { DotPattern } from "@/components/ui/dot-pattern";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -42,13 +44,24 @@ export default function Home() {
 
   return (
     <div
-      className={`flex flex-col min-h-screen dark:bg-black dark:text-white bg-white text-black relative `}
+      className={`z-10 flex flex-col min-h-screen dark:bg-black dark:text-white bg-white text-black relative `}
     >
       <Navbar />
 
       <main className="flex-1">
         <section className="h-screen w-full flex items-center justify-center ">
-          <div className="w-3/4">
+          <DotPattern
+            width={30}
+            height={30}
+            cx={10}
+            cy={10}
+            cr={1}
+            className={cn(
+              "[mask-image:linear-gradient(to_bottom_right,white,white,transparent,transparent)] z-0 h-screen"
+            )}
+          />
+
+          <div className="z-10 w-3/4">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-4">
                 <h1 className="text-3xl font-semibold sm:text-4xl md:text-5xl lg:text-[5.25rem]/none">
