@@ -206,11 +206,11 @@ const IdeaCard = ({ initialIdea }) => {
     <>
       <Card className="w-72 border-none mobile2:w-96 h-full px-6 py-4 flex flex-col justify-between gap-6 cursor-default group dark:bg-bgGray border-[#242424] bg-[#FBFBFB] shadow-md">
         <div className="space-y-2">
-          <h3 className="text-2xl font-semibold max-h-16 text-ellipsis overflow-hidden">
+          <h3 className="text-2xl font-semibold max-h-16 truncate">
             {idea?.title}
           </h3>
 
-          <p className="max-h-12 text-ellipsis overflow-hidden text-textGray">
+          <p className="h-12 overflow-hidden text-ellipsis text-textGray ">
             {idea?.description}.
           </p>
         </div>
@@ -226,7 +226,7 @@ const IdeaCard = ({ initialIdea }) => {
           </div>
 
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center justify-between w-full">
+            <div className="flex flex-wrap md:flex-nowrap gap-y-4 items-center justify-between w-full">
               <div className="flex gap-2 overflow-clip w-44">
                 {idea?.tags.slice(0, 1).map((obj) => (
                   <Badge
@@ -244,7 +244,7 @@ const IdeaCard = ({ initialIdea }) => {
                 )}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between w-full md:w-auto gap-2">
                 <motion.div
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -304,7 +304,7 @@ const IdeaCard = ({ initialIdea }) => {
         open={dialogState.isOpen}
         onOpenChange={() => setDialogState({ isOpen: false, type: null })}
       >
-        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none  overflow-y-auto dark:bg-bgGray">
+        <DialogContent className="w-full sm:w-11/12 md:w-4/5 max-w-none h-[90vh] sm:h-[95vh] md:h-[90vh] border-none  overflow-y-auto">
           <DialogHeader className="h-auto mb-4 sm:mb-6">
             <DialogTitle className="text-center text-xl sm:text-2xl md:text-4xl mb-2 sm:mb-4 ">
               {idea?.title}

@@ -34,7 +34,7 @@ export default function Navbar() {
       </div>
 
       <div
-        className={`flex-col md:flex-row md:flex md:items-center md:gap-x-8 text-xl border-b-2 border-b-black md:border-none absolute md:relative bg-black md:bg-transparent top-16 md:top-auto right-0 md:right-auto w-full md:w-auto p-4 md:p-0 dark:text-white test-black  ${
+        className={`flex-col items-center md:flex-row md:flex md:items-center md:gap-x-8 text-xl border-b-2 dark:border-b-black md:border-none absolute md:relative border-gray-200 bg-white dark:bg-black top-16 md:top-auto right-0 md:right-auto w-full md:w-auto p-4 md:p-0 dark:text-white test-black ${
           isOpen ? "flex" : "hidden"
         }`}
       >

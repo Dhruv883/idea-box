@@ -2,7 +2,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="p-8 max-w-3xl mx-auto">
+    <div className="md:p-8 max-w-3xl mx-auto">
       <h1 className="text-5xl font-semibold mb-6">Privacy Policy</h1>
       <p className="text-gray-600 mb-4">Last updated: October 29, 2024</p>
       <p className="mb-4">
