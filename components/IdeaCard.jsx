@@ -522,7 +522,7 @@ const IdeaCard = ({ initialIdea }) => {
             ) : (
               idea.suggestions.map((suggestion) => (
                 <Card key={suggestion.id} className="mb-4">
-                  <CardHeader className="flex gap-4">
+                  <CardHeader className="flex flex-row gap-4">
                     <Avatar>
                       <AvatarImage
                         src={suggestion.user.image}
@@ -530,7 +530,7 @@ const IdeaCard = ({ initialIdea }) => {
                       />
                       <AvatarFallback>{suggestion.user.name[0]}</AvatarFallback>
                     </Avatar>
-                    <div>
+                    <div className="w-min">
                       <CardTitle>{suggestion.user.name}</CardTitle>
                       <p className="text-sm text-muted-foreground">
                         {new Date(suggestion.createdAt).toLocaleString()}
